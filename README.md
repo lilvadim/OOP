@@ -1,2 +1,2 @@
 # OOP
-OOP Lab Works for NSU
+OOP Lab Works for Novosibirsk State University
