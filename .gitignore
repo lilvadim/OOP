@@ -1,6 +1,6 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/git,java,intellij,gradle
-# Edit at https://www.toptal.com/developers/gitignore?templates=git,java,intellij,gradle
+# Created by https://www.toptal.com/developers/gitignore/api/gradle,java,git,macos,intellij
+# Edit at https://www.toptal.com/developers/gitignore?templates=gradle,java,git,macos,intellij
 
 ### Git ###
 # Created by git for backups. To disable backups in Git:
@@ -148,6 +148,35 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
 ### Gradle ###
 .gradle
 build/
@@ -173,4 +202,4 @@ gradle-app.setting
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# End of https://www.toptal.com/developers/gitignore/api/git,java,intellij,gradle
+# End of https://www.toptal.com/developers/gitignore/api/gradle,java,git,macos,intellij
