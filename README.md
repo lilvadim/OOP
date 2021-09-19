@@ -1,2 +1,3 @@
 # OOP
-OOP Lab Works for Novosibirsk State University
+## Vadim Mostovoy
+OOP Lab Works for Novosibirsk State University.
