@@ -1,5 +1,3 @@
-# OOP 
+# OOP - _Vadim Mostovoy_
 
-**Vadim Mostovoy**
-
-OOP Lab Works for Novosibirsk State University.
+**OOP** Lab Works for Novosibirsk State University.
