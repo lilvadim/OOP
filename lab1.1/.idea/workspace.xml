@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba9bc3c4-a88b-4b1f-af9e-b591b2d8e98a" name="Changes" comment="" />
+    <list default="true" id="ba9bc3c4-a88b-4b1f-af9e-b591b2d8e98a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ru.nsu.vadim/HeapsortTest.java" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,6 +72,8 @@
       <workItem from="1632064793943" duration="494000" />
       <workItem from="1632210080067" duration="3719000" />
       <workItem from="1632279579261" duration="419000" />
+      <workItem from="1632280125872" duration="354000" />
+      <workItem from="1632286696798" duration="33000" />
     </task>
     <servers />
   </component>
