@@ -13,10 +13,10 @@ public class App {
             arr[i] = input.nextInt();
         }
 
-        Sort.Elem[] res = Sort.heapSort(arr);
+        Sort.heapSort(arr);
 
-        for (int i = 0; i < n; i++) {
-            System.out.println(res[i].key);
+        for (int item : arr) {
+            System.out.println(item);
         }
     }
 }
