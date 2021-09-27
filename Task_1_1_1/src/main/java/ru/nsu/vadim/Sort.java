@@ -9,9 +9,9 @@ public class Sort {
         }
 
         for (int i = n - 1; i > 0; i--) {
-            int temp = arr[0];
+            int swap = arr[0];
             arr[0] = arr[i];
-            arr[i] = temp;
+            arr[i] = swap;
 
             heapify(arr, i, 0);
         }
