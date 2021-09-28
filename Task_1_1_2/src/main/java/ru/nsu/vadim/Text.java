@@ -11,21 +11,24 @@ public class Text {
         FileReader reader = new FileReader(fileName);
         return searchPattern(pattern, reader);
     }
+
     public static List<Integer> searchPattern(String pattern, String string) throws Exception {
         StringReader reader = new StringReader(string);
         return searchPattern(pattern, reader);
     }
+
     public static List<Integer> searchPattern(String pattern, Reader reader) throws Exception {
-        int[] zArr;
-        ArrayList<Integer> res = new ArrayList<>(0);
         int buffSize = 20;
+        char sentinel = '\uFFFD';
         int patternLen = pattern.length();
         char[] buffer = new char[buffSize];
         for (int i = 0; i < patternLen; i++) {
             buffer[i] = pattern.charAt(i);
         }
+        buffer[patternLen] = sentinel;
 
-        buffer[patternLen] = '$';
+        int[] zArr;
+        ArrayList<Integer> res = new ArrayList<>(0);
 
         int charRead;
         for (int i = 0; true; i++) {
@@ -38,8 +41,8 @@ public class Text {
                 break;
             }
             if (charRead < buffSize - patternLen * 2) {
-                for (int c = patternLen * 2 + charRead; c < buffSize; c++){
-                    buffer[c] = '$';
+                for (int c = patternLen * 2 + charRead; c < buffSize; c++) {
+                    buffer[c] = sentinel;
                 }
             }
             zArr = calculateZ(buffer);
