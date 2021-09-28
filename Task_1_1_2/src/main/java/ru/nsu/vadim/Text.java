@@ -7,8 +7,9 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class Text {
-    public static ArrayList<Integer> searchPattern(String pattern, String fileName) throws Exception {
-        ArrayList<Integer> zArrList = new ArrayList(0);
+    public static void searchPattern(String pattern, String fileName) throws Exception {
+        int[] zArr;
+        int[] res = new int[1024];
         int patternLen = pattern.length();
         FileReader reader = new FileReader(fileName);
         char[] buffer = new char[1024];
@@ -17,17 +18,19 @@ public class Text {
         }
         buffer[patternLen] = '$';
         int eofCheck = 0;
-        for (int i = 0; eofCheck != -1; i++) {
-            eofCheck = reader.read(buffer, patternLen, 1024 - patternLen - 1);
-            zArrList.addAll(Arrays.stream(calculateZ(buffer)).boxed().collect(Collectors.toList()));
-        }
-        ArrayList<Integer> res = new ArrayList<>(1);
-        for (int i = 0; i < zArrList.size(); i++) {
-            if (zArrList.get(i) == patternLen) {
-                res.add(i - patternLen - 1);
+        int resCnt = 0;
+        for (int i = 0; true; i++) {
+            eofCheck = reader.read(buffer, patternLen + 1, 1024 - patternLen - 1);
+            if (eofCheck == -1) {
+                break;
+            }
+            zArr = calculateZ(buffer);
+            for (int j = patternLen + 1; j < 1024; j++) {
+                if (zArr[j] == patternLen) {
+                    System.out.println(j + i * 1024 - patternLen - 1);
+                }
             }
         }
-        return res;
     }
 
     private static int[] calculateZ(char[] str) {
