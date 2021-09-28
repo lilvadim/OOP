@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba9bc3c4-a88b-4b1f-af9e-b591b2d8e98a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/nsu/vadim/Sort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/nsu/vadim/Sort.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,6 +162,7 @@
       <workItem from="1632651454932" duration="9719000" />
       <workItem from="1632723692374" duration="306000" />
       <workItem from="1632724044682" duration="1101000" />
+      <workItem from="1632819224068" duration="1463000" />
     </task>
     <servers />
   </component>
@@ -181,7 +180,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/main" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
