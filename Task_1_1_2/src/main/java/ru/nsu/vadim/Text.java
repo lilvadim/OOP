@@ -18,41 +18,38 @@ public class Text {
     }
 
     public static List<Integer> searchPattern(String pattern, Reader reader) throws Exception {
-        int buffSize = 20;
-        char sentinel = '\uFFFD';
-        int patternLen = pattern.length();
+        final int buffSize = 20;
+        final char sentinel = '\uFFFD';
+        final int patternLen = pattern.length();
         char[] buffer = new char[buffSize];
         for (int i = 0; i < patternLen; i++) {
             buffer[i] = pattern.charAt(i);
         }
         buffer[patternLen] = sentinel;
 
-        int[] zArr;
         ArrayList<Integer> res = new ArrayList<>(0);
 
-        int charRead;
+        int readLenFirst = buffSize - patternLen - 1;
+        int readLen = buffSize - patternLen * 2;
         for (int i = 0; true; i++) {
+            int charRead;
             if (i == 0) {
-                charRead = reader.read(buffer, patternLen + 1, buffSize - patternLen - 1);
+                charRead = reader.read(buffer, patternLen + 1, readLenFirst);
             } else {
-                charRead = reader.read(buffer, patternLen * 2, buffSize - patternLen * 2);
+                charRead = reader.read(buffer, patternLen * 2, readLen);
             }
             if (charRead == -1) {
                 break;
             }
-            if (charRead < buffSize - patternLen * 2) {
-                for (int c = patternLen * 2 + charRead; c < buffSize; c++) {
-                    buffer[c] = sentinel;
-                }
-            }
-            zArr = calculateZ(buffer);
-            for (int j = patternLen + 1; j < buffSize; j++) {
+
+            int[] zArr = calculateZ(buffer);
+            for (int j = patternLen + 1; j < patternLen + 1 + charRead; j++) {
                 if (zArr[j] == patternLen) {
-//                    System.out.println(j + i * (buffSize - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i);
+//                  System.out.println(j + i * (buffSize - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i);
                     res.add(j + i * (buffSize - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i);
                 }
             }
-            if (charRead < buffSize - patternLen * 2) {
+            if ((charRead < readLenFirst && i == 0) || (charRead < readLen)) {
                 break;
             }
             System.arraycopy(buffer, buffSize - patternLen + 1, buffer, patternLen + 1, patternLen - 1);
