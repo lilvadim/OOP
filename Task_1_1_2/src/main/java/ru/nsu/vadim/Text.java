@@ -4,33 +4,36 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Text {
-    public static List<Integer> searchPatternFile(String pattern, String fileName) throws Exception {
+    public static ArrayList<Integer> searchPatternFile(String pattern, String fileName) throws Exception {
         FileReader reader = new FileReader(fileName);
         return searchPattern(pattern, reader);
     }
 
-    public static List<Integer> searchPattern(String pattern, String string) throws Exception {
+    public static ArrayList<Integer> searchPattern(String pattern, String string) throws Exception {
         StringReader reader = new StringReader(string);
         return searchPattern(pattern, reader);
     }
 
-    public static List<Integer> searchPattern(String pattern, Reader reader) throws Exception {
-        final int buffSize = 20;
+    public static ArrayList<Integer> searchPattern(String pattern, Reader reader) throws Exception {
+        ArrayList<Integer> res = new ArrayList<>(0);
+
+        if (pattern.length() == 0) {
+            return res;
+        }
+
         final char sentinel = '\uFFFD';
         final int patternLen = pattern.length();
-        char[] buffer = new char[buffSize];
+        final int buffLen = patternLen * 16;
+        char[] buffer = new char[buffLen];
         for (int i = 0; i < patternLen; i++) {
             buffer[i] = pattern.charAt(i);
         }
         buffer[patternLen] = sentinel;
 
-        ArrayList<Integer> res = new ArrayList<>(0);
-
-        int readLenFirst = buffSize - patternLen - 1;
-        int readLen = buffSize - patternLen * 2;
+        int readLenFirst = buffLen - patternLen - 1;
+        int readLen = buffLen - patternLen * 2;
         for (int i = 0; true; i++) {
             int charRead;
             if (i == 0) {
@@ -45,14 +48,14 @@ public class Text {
             int[] zArr = calculateZ(buffer);
             for (int j = patternLen + 1; j < patternLen + 1 + charRead; j++) {
                 if (zArr[j] == patternLen) {
-//                  System.out.println(j + i * (buffSize - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i);
-                    res.add(j + i * (buffSize - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i);
+                    int entryIndex = j + i * (buffLen - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i;
+                    res.add(entryIndex);
                 }
             }
             if ((charRead < readLenFirst && i == 0) || (charRead < readLen)) {
                 break;
             }
-            System.arraycopy(buffer, buffSize - patternLen + 1, buffer, patternLen + 1, patternLen - 1);
+            System.arraycopy(buffer, buffLen - patternLen + 1, buffer, patternLen + 1, patternLen - 1);
         }
         reader.close();
         return res;
