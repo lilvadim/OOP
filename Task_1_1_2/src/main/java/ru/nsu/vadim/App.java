@@ -1,5 +1,6 @@
 package ru.nsu.vadim;
 
+import java.nio.file.Path;
 import java.util.Scanner;
 
 public class App {
@@ -7,8 +8,8 @@ public class App {
         System.out.println("INPUT FILENAME AND PATTERN: ");
         Scanner input = new Scanner(System.in);
 
-        String fileName = input.nextLine();
+        Path filePath = Path.of(input.nextLine());
         String pattern = input.nextLine();
-        System.out.println(Text.searchPatternFile(pattern, fileName));
+        System.out.println(Text.searchPattern(pattern, filePath));
     }
 }
