@@ -3,11 +3,12 @@ package ru.nsu.vadim;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class Text {
-    public static ArrayList<Integer> searchPatternFile(String pattern, String fileName) throws Exception {
-        FileReader reader = new FileReader(fileName);
+    public static ArrayList<Integer> searchPattern(String pattern, Path filePath) throws Exception {
+        FileReader reader = new FileReader(String.valueOf(filePath));
         return searchPattern(pattern, reader);
     }
 

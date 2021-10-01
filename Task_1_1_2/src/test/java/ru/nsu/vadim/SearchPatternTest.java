@@ -27,29 +27,29 @@ public class SearchPatternTest {
     }
 
     @Test
-    public void searchPatternFile_testEng() throws Exception {
+    public void searchPattern_file_testEng() throws Exception {
         String pattern = "free";
-        String filePath = "src/test/resources/GPL.txt";
-        ArrayList<Integer> res = Text.searchPatternFile(pattern, filePath);
-        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(Path.of(filePath)));
+        Path filePath = Path.of("src/test/resources/GPL.txt");
+        ArrayList<Integer> res = Text.searchPattern(pattern, filePath);
+        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(filePath));
         Assertions.assertEquals(ans, res);
     }
 
     @Test
-    public void searchPatternFile_testRu() throws Exception {
+    public void searchPattern_file_testRu() throws Exception {
         String pattern = "иценз";
-        String filePath = "src/test/resources/GPL_RU.txt";
-        ArrayList<Integer> res = Text.searchPatternFile(pattern, filePath);
-        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(Path.of(filePath)));
+        Path filePath = Path.of("src/test/resources/GPL_RU.txt");
+        ArrayList<Integer> res = Text.searchPattern(pattern, filePath);
+        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(filePath));
         Assertions.assertEquals(ans, res);
     }
 
     @Test
-    public void searchPatternFile_testEmptyPattern() throws Exception {
+    public void searchPattern_file_testEmptyPattern() throws Exception {
         String pattern = "";
-        String filePath = "src/test/resources/GPL.txt";
-        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(Path.of(filePath)));
-        ArrayList<Integer> res = Text.searchPatternFile(pattern, filePath);
+        Path filePath = Path.of("src/test/resources/GPL.txt");
+        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(filePath));
+        ArrayList<Integer> res = Text.searchPattern(pattern, filePath);
         Assertions.assertEquals(ans, res);
     }
 
@@ -99,11 +99,11 @@ public class SearchPatternTest {
     }
 
     @Test
-    public void searchPatternFile_testMatchLarge() throws Exception {
-        String filePath = "src/test/resources/GPL.txt";
-        String pattern = Files.readString(Path.of(filePath));
-        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(Path.of(filePath)));
-        ArrayList<Integer> res = Text.searchPatternFile(pattern, filePath);
+    public void searchPattern_file_testMatchLarge() throws Exception {
+        Path filePath = Path.of("src/test/resources/GPL.txt");
+        String pattern = Files.readString(filePath);
+        ArrayList<Integer> ans = searchPattern_reference(pattern, Files.readString(filePath));
+        ArrayList<Integer> res = Text.searchPattern(pattern, filePath);
         Assertions.assertEquals(ans, res);
     }
 }
