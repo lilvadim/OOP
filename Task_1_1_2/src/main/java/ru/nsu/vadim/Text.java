@@ -61,7 +61,7 @@ public class Text {
         reader.close();
         return res;
     }
-    public static int[] calculateZ(char[] str) {
+    private static int[] calculateZ(char[] str) {
         int len = str.length;
         int[] zArr = new int[len];
         int left = 0;
