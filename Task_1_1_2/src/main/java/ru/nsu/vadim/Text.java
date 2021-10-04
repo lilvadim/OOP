@@ -19,18 +19,17 @@ public class Text {
 
     public static ArrayList<Integer> searchPattern(String pattern, Reader reader) throws Exception {
         ArrayList<Integer> res = new ArrayList<>(0);
+        final int patternLen = pattern.length();
 
-        if (pattern.length() == 0) {
+        if (patternLen == 0) {
             return res;
         }
 
         final char sentinel = '\uFFFD';
-        final int patternLen = pattern.length();
         final int buffLen = patternLen * 16;
         char[] buffer = new char[buffLen];
-        for (int i = 0; i < patternLen; i++) {
-            buffer[i] = pattern.charAt(i);
-        }
+//        final char[] patternArr = pattern.toCharArray();
+        System.arraycopy(pattern.toCharArray(), 0, buffer, 0, patternLen);
         buffer[patternLen] = sentinel;
 
         int readLenFirst = buffLen - patternLen - 1;
@@ -47,6 +46,7 @@ public class Text {
             }
 
             int[] zArr = calculateZ(buffer);
+
             for (int j = patternLen + 1; j < patternLen + 1 + charRead; j++) {
                 if (zArr[j] == patternLen) {
                     int entryIndex = j + i * (buffLen - patternLen - 1) - patternLen - 1 - (patternLen - 1) * i;
@@ -61,33 +61,21 @@ public class Text {
         reader.close();
         return res;
     }
-
-    private static int[] calculateZ(char[] str) {
+    public static int[] calculateZ(char[] str) {
         int len = str.length;
         int[] zArr = new int[len];
         int left = 0;
         int right = 0;
-        for (int k = 1; k < len; k++) {
-            if (k > right) {
-                left = right = k;
-                while (right < len && str[right] == str[right - left]) {
+        for (int i = 1; i < len; i++) {
+            if (i > right || zArr[i - left] > right - i + 1) {
+                left = right = i;
+                while (right < len && str[right - left] == str[right]) {
                     right++;
                 }
-                zArr[k] = right - left;
+                zArr[i] = right - left;
                 right--;
-            } else {
-                int k1 = k - left;
-                if (zArr[k1] < right - k + 1) {
-                    zArr[k] = zArr[k1];
-                } else {
-                    left = k;
-                    while (right < len && str[right] == str[right - left]) {
-                        right++;
-                    }
-                    zArr[k] = right - left;
-                    right--;
-                }
-            }
+            } else
+                zArr[i] = zArr[i - left];
         }
         return zArr;
     }
