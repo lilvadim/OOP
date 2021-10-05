@@ -61,21 +61,20 @@ public class Text {
         reader.close();
         return res;
     }
-    private static int[] calculateZ(char[] str) {
-        int len = str.length;
+    private static int[] calculateZ(char[] string) {
+        int len = string.length;
         int[] zArr = new int[len];
         int left = 0;
         int right = 0;
         for (int i = 1; i < len; i++) {
-            if (i > right || zArr[i - left] > right - i + 1) {
-                left = right = i;
-                while (right < len && str[right - left] == str[right]) {
-                    right++;
-                }
-                zArr[i] = right - left;
-                right--;
-            } else
-                zArr[i] = zArr[i - left];
+            zArr[i] = right > i ? Math.min(zArr[i - left], right - i) : 0;
+            while (i + zArr[i] < len && string[zArr[i]] == string[i+zArr[i]]) {
+                zArr[i]++;
+            }
+            if (i + zArr[i] > right) {
+                left = i;
+                right = i + zArr[i];
+            }
         }
         return zArr;
     }
