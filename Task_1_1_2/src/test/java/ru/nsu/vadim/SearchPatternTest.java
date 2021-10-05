@@ -63,6 +63,15 @@ public class SearchPatternTest {
     }
 
     @Test
+    public void searchPattern_string_testMultiplePattern() throws Exception {
+        String pattern = "pattern";
+        String string = "patternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpatternpattern";
+        ArrayList<Integer> ans = searchPattern_reference(pattern, string);
+        ArrayList<Integer> res = Text.searchPattern(pattern, string);
+        Assertions.assertEquals(ans, res);
+    }
+
+    @Test
     public void searchPattern_string_testEmptyAll() throws Exception {
         String pattern = "";
         String string = "";
