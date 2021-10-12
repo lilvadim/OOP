@@ -123,7 +123,7 @@ public class StackTest {
 
             int randSize = abs(rand.nextInt(count));
             ArrayList<Integer> refPop = new ArrayList<>();
-            for (int j = 0; j < randSize; j++){
+            for (int j = 0; j < randSize; j++) {
                 refPop.add(refStack.pop());
             }
             ru.nsu.vadim.Stack<Integer> myPopStack = myStack.popStack(randSize);
