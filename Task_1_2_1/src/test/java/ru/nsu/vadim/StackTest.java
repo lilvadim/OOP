@@ -12,33 +12,43 @@ import static java.lang.Math.abs;
 public class StackTest {
 
     @Test
-    void Stack_AllDefaultTest() throws Exception {
+    void stack_AllDefaultTest() {
         Stack<Integer> reference = new Stack<>();
-        Data.Stack<Integer> myStack = new Data.Stack<>();
+        ru.nsu.vadim.Stack<Integer> myStack = new ru.nsu.vadim.Stack<>();
+
         reference.push(2);
         myStack.push(2);
+
         reference.push(7);
         myStack.push(7);
+
         reference.push(4);
         reference.push(8);
-        Data.Stack<Integer> toPush = new Data.Stack<>();
+
+        ru.nsu.vadim.Stack<Integer> toPush = new ru.nsu.vadim.Stack<>();
         toPush.push(4);
         toPush.push(8);
         myStack.pushStack(toPush);
+
         Assertions.assertArrayEquals(reference.toArray(), myStack.toArray());
+
         int refPop = reference.pop();
         int myPop = myStack.pop();
+
         Assertions.assertEquals(refPop, myPop);
+
         reference.pop();
         reference.pop();
+
         myStack.popStack(2);
+
         Assertions.assertArrayEquals(reference.toArray(), myStack.toArray());
         Assertions.assertEquals(reference.size(), myStack.size());
     }
 
     @Test
-    void pop_ItemToEmptyTest() throws Exception {
-        Data.Stack<String> myStack = new Data.Stack<>();
+    void pop_ItemToEmptyTest() {
+        ru.nsu.vadim.Stack<String> myStack = new ru.nsu.vadim.Stack<>();
         Stack<String> reference = new Stack<>();
         Assertions.assertArrayEquals(reference.toArray(), myStack.toArray());
         String value = "test";
@@ -49,12 +59,12 @@ public class StackTest {
     }
 
     @Test
-    void push_pop_RandTest() throws Exception {
+    void push_pop_RandTest() {
         for (int k = 0; k < 10000; k++) {
             Random rand = new Random();
             final int count = abs(rand.nextInt(10000)) + 1;
             Stack<Integer> refStack = new Stack<>();
-            Data.Stack<Integer> myStack = new Data.Stack<>();
+            ru.nsu.vadim.Stack<Integer> myStack = new ru.nsu.vadim.Stack<>();
             for (int i = 0; i < count; i++) {
                 int number = rand.nextInt();
                 refStack.push(number);
@@ -79,8 +89,8 @@ public class StackTest {
             Random rand = new Random();
             final int count = abs(rand.nextInt(10000)) + 1;
             Stack<Integer> refStack = new Stack<>();
-            Data.Stack<Integer> myStack = new Data.Stack<>();
-            Data.Stack<Integer> toPush = new Data.Stack<>();
+            ru.nsu.vadim.Stack<Integer> myStack = new ru.nsu.vadim.Stack<>();
+            ru.nsu.vadim.Stack<Integer> toPush = new ru.nsu.vadim.Stack<>();
             for (int i = 0; i < count; i++) {
                 toPush.push(rand.nextInt());
             }
@@ -94,13 +104,13 @@ public class StackTest {
     }
 
     @Test
-    void popStack_Test() throws Exception {
+    void popStack_Test() {
         for (int k = 0; k < 10000; k++) {
             Random rand = new Random();
             final int count = abs(rand.nextInt(10000)) + 1;
             Stack<Integer> refStack = new Stack<>();
-            Data.Stack<Integer> myStack = new Data.Stack<>();
-            Data.Stack<Integer> toPush = new Data.Stack<>();
+            ru.nsu.vadim.Stack<Integer> myStack = new ru.nsu.vadim.Stack<>();
+            ru.nsu.vadim.Stack<Integer> toPush = new ru.nsu.vadim.Stack<>();
             for (int i = 0; i < count; i++) {
                 toPush.push(rand.nextInt());
             }
@@ -116,7 +126,7 @@ public class StackTest {
             for (int j = 0; j < randSize; j++){
                 refPop.add(refStack.pop());
             }
-            Data.Stack<Integer> myPopStack = myStack.popStack(randSize);
+            ru.nsu.vadim.Stack<Integer> myPopStack = myStack.popStack(randSize);
             Assertions.assertArrayEquals(refPop.toArray(), myPopStack.toArray());
         }
     }
@@ -127,7 +137,7 @@ public class StackTest {
             Random rand = new Random();
             final int count = abs(rand.nextInt(10000)) + 1;
             Stack<Integer> refStack = new Stack<>();
-            Data.Stack<Integer> myStack = new Data.Stack<>();
+            ru.nsu.vadim.Stack<Integer> myStack = new ru.nsu.vadim.Stack<>();
             for (int i = 0; i < count; i++) {
                 int number = rand.nextInt();
                 refStack.push(number);
