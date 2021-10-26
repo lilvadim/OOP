@@ -2,17 +2,18 @@ package ru.nsu.vadim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Gradebook {
-    private Person student = new Person(null, null, null);
-    final int MAX_SEMESTER = 8;
-    private ArrayList<HashMap<String, Grade>> semesterGrades = new ArrayList<>(MAX_SEMESTER);
+
+    private Person student;
+    private final int MAX_SEMESTER = 8;
+    private final List<Map<String, Grade>> semesterGrades = new ArrayList<>(MAX_SEMESTER);
     private int qualifyingWorkGrade;
 
-    Gradebook(String f, String i, String o) {
-        this.student.setSurname(f);
-        this.student.setName(i);
-        this.student.setPatronymic(o);
+    public Gradebook(String surname, String name, String patronymic) {
+        this.student = new Person(surname, name, patronymic);
         for (int k = 0; k < MAX_SEMESTER; k++) {
             semesterGrades.add(new HashMap<>());
         }
@@ -43,12 +44,9 @@ public class Gradebook {
     }
 
     public ArrayList<Integer> getJustGrades(int semester) {
-        ArrayList<Grade> got = new ArrayList<>(semesterGrades.get(semester - 1).values());
-        ArrayList<Integer> res = new ArrayList<>();
-        for (Grade item : got) {
-            res.add(item.getGrade());
-        }
-        return res;
+        return new ArrayList<>(
+                semesterGrades.get(semester - 1).values()
+                        .stream().map(Grade::getGrade).toList());
     }
 
     public double avgGradesAll() {
@@ -61,9 +59,9 @@ public class Gradebook {
     }
 
     public int currentSemester() {
-        int i;
-        for (i = 0; !semesterGrades.get(i).isEmpty(); i++) ;
-        return i;
+        return (int) semesterGrades.stream()
+                .takeWhile(s -> !s.isEmpty())
+                .count();
     }
 
     public boolean isIncreasedScholarshipReady() {
