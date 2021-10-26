@@ -3,35 +3,71 @@ package ru.nsu.vadim;
 import java.time.LocalDate;
 
 public class Grade {
-    Grade(int grade) {
+    /**
+     * initialises Grade with only a grade value
+     *
+     * @param grade integer grade value
+     */
+    public Grade(int grade) {
         this.grade = grade;
     }
-    Grade(int grade, LocalDate date, formType form) {
+
+    /**
+     * initialises Grade without Teacher
+     *
+     * @param grade integer grade value
+     * @param date  date of grade
+     * @param form  form of attestation
+     */
+    public Grade(int grade, LocalDate date, FormType form) {
         this.grade = grade;
         this.date = date;
         this.form = form;
     }
 
-    Grade(int grade, LocalDate date, formType form,
-          String teacherF,
-          String teacherI,
-          String teacherO) {
+    /**
+     * Fully initialise Grade
+     *
+     * @param grade             integer grade value
+     * @param date              date of grade
+     * @param form              form of attestation
+     * @param teacherSurname    teacher's surname
+     * @param teacherName       teacher's name
+     * @param teacherPatronymic teacher's patronymic
+     */
+    public Grade(int grade,
+                 LocalDate date,
+                 FormType form,
+                 String teacherSurname,
+                 String teacherName,
+                 String teacherPatronymic) {
         this(grade, date, form);
-        this.teacher.setSurname(teacherF);
-        this.teacher.setName(teacherI);
-        this.teacher.setPatronymic(teacherO);
+        this.teacher = new Person(teacherSurname, teacherName, teacherPatronymic);
     }
 
-    Grade(int grade, LocalDate date, formType form, Person teacher) {
+    /**
+     * Fully initialise Grade using Person to initialise Teacher
+     *
+     * @param grade   integer grade value
+     * @param date    date of grade
+     * @param form    form of attestation
+     * @param teacher teacher as Person object
+     */
+    public Grade(int grade, LocalDate date, FormType form, Person teacher) {
         this(grade, date, form);
         this.teacher = teacher;
     }
 
     private int grade;
-    private LocalDate date = null;
-    public enum formType {diffCredit, exam, credit}
-    private formType form = null;
-    private Person teacher = null;
+    private LocalDate date;
+
+    /**
+     * Attestation form: exam, credit, differential credit
+     */
+    public enum FormType {diffCredit, exam, credit}
+
+    private FormType form;
+    private Person teacher;
 
     public int getGrade() {
         return grade;
@@ -49,11 +85,11 @@ public class Grade {
         this.date = date;
     }
 
-    public formType getForm() {
+    public FormType getForm() {
         return form;
     }
 
-    public void setForm(formType form) {
+    public void setForm(FormType form) {
         this.form = form;
     }
 

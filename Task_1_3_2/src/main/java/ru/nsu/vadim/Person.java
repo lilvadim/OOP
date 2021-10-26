@@ -1,10 +1,10 @@
 package ru.nsu.vadim;
 
 public class Person {
-    Person(String f, String i, String o) {
-        this.setSurname(f);
-        this.setName(i);
-        this.setPatronymic(o);
+    public Person(String surname, String name, String patronymic) {
+        this.setSurname(surname);
+        this.setName(name);
+        this.setPatronymic(patronymic);
     }
 
     private String surname;      // Ф
@@ -35,7 +35,8 @@ public class Person {
         this.surname = surname;
     }
 
-    public String getFullName() {
+    @Override
+    public String toString() {
         return surname + " " + name + " " + patronymic;
     }
 }

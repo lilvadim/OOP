@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 public class GradebookTest {
     @Test
@@ -14,11 +13,11 @@ public class GradebookTest {
                 "Вадиммм",
                 "Евгеньевич");
 
-        String myFullName = myBook.getStudent().getFullName();
+        String myFullName = myBook.getStudent().toString();
         Assertions.assertEquals("Мостовой Вадиммм Евгеньевич", myFullName);
 
         myBook.getStudent().setName("Вадим");
-        myFullName = myBook.getStudent().getFullName();
+        myFullName = myBook.getStudent().toString();
         Assertions.assertEquals("Мостовой Вадим Евгеньевич", myFullName);
 
         double myAvg = myBook.avgGradesAll();
@@ -29,7 +28,7 @@ public class GradebookTest {
                 "Иностранный язык",
                 new Grade(5,
                         LocalDate.of(2020, 12, 23),
-                        Grade.formType.credit,
+                        Grade.FormType.credit,
                         new Person(
                                 "Хоцкина",
                                 "Ольга",
@@ -39,7 +38,7 @@ public class GradebookTest {
                 "Введение в алгебру и анализ",
                 new Grade(4,
                         LocalDate.of(2021, 1, 12),
-                        Grade.formType.exam,
+                        Grade.FormType.exam,
                         new Person(
                                 "Васкевич",
                                 "Владимир",
@@ -49,7 +48,7 @@ public class GradebookTest {
                 "История",
                 new Grade(5,
                         LocalDate.of(2020, 12, 28),
-                        Grade.formType.diffCredit,
+                        Grade.FormType.diffCredit,
                         new Person(
                                 "Оплаканская",
                                 "Рената",
@@ -60,7 +59,7 @@ public class GradebookTest {
                 "Введение в дискретную математику и математическую логику",
                 new Grade(5,
                         LocalDate.of(2021, 1, 19),
-                        Grade.formType.exam,
+                        Grade.FormType.exam,
                         new Person(
                                 "Власов",
                                 "Дмитрий",
