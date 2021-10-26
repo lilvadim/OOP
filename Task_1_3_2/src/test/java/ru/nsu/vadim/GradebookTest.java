@@ -1,28 +1,65 @@
 package ru.nsu.vadim;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 public class GradebookTest {
-    @Test
-    void gradebook_testAll() {
-        Gradebook myBook = new Gradebook(
+    Gradebook myBook;
+
+    @BeforeEach
+    void init() {
+        myBook = new Gradebook(
                 "Мостовой",
                 "Вадиммм",
                 "Евгеньевич");
+        addGrade_test();
+    }
 
-        String myFullName = myBook.getStudent().toString();
-        Assertions.assertEquals("Мостовой Вадиммм Евгеньевич", myFullName);
+    @Test
+    void person_toString_test() {
+        Assertions.assertEquals(
+                "Мостовой Вадиммм Евгеньевич",
+                myBook.getStudent().toString());
+    }
 
+    @Test
+    void person_setName_test() {
         myBook.getStudent().setName("Вадим");
-        myFullName = myBook.getStudent().toString();
-        Assertions.assertEquals("Мостовой Вадим Евгеньевич", myFullName);
+        Assertions.assertEquals(
+                "Мостовой Вадим Евгеньевич",
+                myBook.getStudent().toString());
+    }
 
-        double myAvg = myBook.avgGradesAll();
-        Assertions.assertEquals(0.0, myAvg);
+    @Test
+    void avgGrades_test() {
+        Assertions.assertEquals(
+                (5 + 5 + 5 + 4) / 4d,
+                myBook.avgGradesAll());
 
+        Gradebook emptyBook = new Gradebook("Ф", "И", "О");
+        Assertions.assertEquals(
+                0.0,
+                emptyBook.avgGradesAll());
+    }
+
+    @Test
+    void currentSemester_test() {
+        Assertions.assertEquals(
+                1,
+                myBook.currentSemester());
+
+        addGrade_test1();
+        Assertions.assertEquals(
+                2,
+                myBook.currentSemester()
+        );
+    }
+
+    @Test
+    void addGrade_test() {
         myBook.addGrade(
                 1,
                 "Иностранный язык",
@@ -66,17 +103,33 @@ public class GradebookTest {
                                 "Юрьевич")));
 
         Assertions.assertEquals(5, myBook.getGrade(1, "Иностранный язык").getGrade());
+    }
 
-        Assertions.assertEquals((5 + 5 + 5 + 4) / 4d, myBook.avgGradesAll());
+    @Test
+    void isIncreasedScholarshipReady_test() {
+        Gradebook trueBook = new Gradebook("test", "test", "test");
+        trueBook.addGrade(1, "OOP", new Grade(5));
+        Assertions.assertTrue(
+                trueBook.isIncreasedScholarshipReady());
 
-        Assertions.assertEquals(1, myBook.currentSemester());
+        addGrade_test1();
+        Assertions.assertFalse(
+                myBook.isIncreasedScholarshipReady());
+    }
 
-        Assertions.assertFalse(myBook.isIncreasedScholarshipReady());
-
+    @Test
+    void isRedDiplomaReady_test() {
         myBook.setQualifyingWorkGrade(5);
+        Assertions.assertTrue(
+                myBook.isRedDiplomaReady());
 
-        Assertions.assertTrue(myBook.isRedDiplomaReady());
+        addGrade_test1();
+        Assertions.assertFalse(
+                myBook.isRedDiplomaReady());
+    }
 
+    @Test
+    void addGrade_test1() {
         myBook.addGrade(1, "Декларативное программирование", new Grade(5));
         myBook.addGrade(1, "Физическая культура и спорт", new Grade(5));
         myBook.addGrade(1, "Основы культуры и речи", new Grade(5));
@@ -92,8 +145,14 @@ public class GradebookTest {
         myBook.addGrade(2, "Физическая культура и спорт", new Grade(5));
         myBook.addGrade(2, "Измерительный практикум", new Grade(5));
 
-        Assertions.assertFalse(myBook.isIncreasedScholarshipReady());
+        Assertions.assertEquals(
+                3,
+                myBook.getGrade(2, "Введение в алгебру и анализ").getGrade()
+        );
 
-        Assertions.assertFalse(myBook.isRedDiplomaReady());
+        Assertions.assertEquals(
+                5,
+                myBook.getGrade(1, "Декларативное программирование").getGrade()
+        );
     }
 }

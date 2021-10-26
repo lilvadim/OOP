@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Grade {
     /**
-     * initialises Grade with only a grade value
+     * Initialises Grade with only a grade value
      *
      * @param grade integer grade value
      */
@@ -13,8 +13,7 @@ public class Grade {
     }
 
     /**
-     * initialises Grade without Teacher
-     *
+     * Initialises Grade without Teacher
      * @param grade integer grade value
      * @param date  date of grade
      * @param form  form of attestation
@@ -23,26 +22,6 @@ public class Grade {
         this.grade = grade;
         this.date = date;
         this.form = form;
-    }
-
-    /**
-     * Fully initialise Grade
-     *
-     * @param grade             integer grade value
-     * @param date              date of grade
-     * @param form              form of attestation
-     * @param teacherSurname    teacher's surname
-     * @param teacherName       teacher's name
-     * @param teacherPatronymic teacher's patronymic
-     */
-    public Grade(int grade,
-                 LocalDate date,
-                 FormType form,
-                 String teacherSurname,
-                 String teacherName,
-                 String teacherPatronymic) {
-        this(grade, date, form);
-        this.teacher = new Person(teacherSurname, teacherName, teacherPatronymic);
     }
 
     /**
@@ -69,34 +48,74 @@ public class Grade {
     private FormType form;
     private Person teacher;
 
+    /**
+     * Returns grade integer value
+     *
+     * @return grade
+     */
     public int getGrade() {
         return grade;
     }
 
+    /**
+     * Sets grade integer value
+     *
+     * @param grade grade to set
+     */
     public void setGrade(int grade) {
         this.grade = grade;
     }
 
+    /**
+     * Returns date of grade as LocalDate object
+     *
+     * @return date
+     */
     public LocalDate getDate() {
         return date;
     }
 
+    /**
+     * Sets date of grade to given date as LocalDate object
+     *
+     * @param date date to set
+     */
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
+    /**
+     * Returns form of attestation
+     *
+     * @return form
+     */
     public FormType getForm() {
         return form;
     }
 
+    /**
+     * Sets form of attestation
+     *
+     * @param form form
+     */
     public void setForm(FormType form) {
         this.form = form;
     }
 
+    /**
+     * Returns teacher as Person class object
+     *
+     * @return teacher
+     */
     public Person getTeacher() {
         return teacher;
     }
 
+    /**
+     * Sets teacher to Person class object given as parameter
+     *
+     * @param teacher teacher to set
+     */
     public void setTeacher(Person teacher) {
         this.teacher = teacher;
     }
