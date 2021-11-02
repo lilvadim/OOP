@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Sqrt extends Operation {
-    protected Sqrt(double a) {
+    public Sqrt(double a) {
         this.a = a;
     }
 

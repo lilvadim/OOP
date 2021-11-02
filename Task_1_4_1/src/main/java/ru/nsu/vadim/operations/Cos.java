@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Cos extends Operation {
-    protected Cos(double a) {
+    public Cos(double a) {
         this.a = a;
     }
 

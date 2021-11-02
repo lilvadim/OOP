@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
-public class Multiply extends Operation {
-    protected Multiply(double a, double b) {
+public class Mult extends Operation {
+    public Mult(double a, double b) {
         this.a = a;
         this.b = b;
     }

@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Log extends Operation {
-    protected Log(double a) {
+    public Log(double a) {
         this.a = a;
     }
 
