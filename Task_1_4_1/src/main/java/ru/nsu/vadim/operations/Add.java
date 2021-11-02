@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Add extends Operation {
-    protected Add(double a, double b) {
+    public Add(double a, double b) {
         this.a = a;
         this.b = b;
     }

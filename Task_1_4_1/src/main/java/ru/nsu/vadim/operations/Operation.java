@@ -1,4 +1,4 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public abstract class Operation {
     protected double a, b;

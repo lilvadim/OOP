@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
-public class Divide extends Operation {
-    protected Divide(double a, double b) {
+public class Div extends Operation {
+    public Div(double a, double b) {
         this.a = a;
         this.b = b;
     }

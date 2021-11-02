@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Sin extends Operation {
-    protected Sin(double a) {
+    public Sin(double a) {
         this.a = a;
     }
 

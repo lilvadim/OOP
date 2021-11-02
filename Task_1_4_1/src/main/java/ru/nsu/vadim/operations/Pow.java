@@ -1,7 +1,7 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.operations;
 
 public class Pow extends Operation {
-    protected Pow(double a, double b) {
+    public Pow(double a, double b) {
         this.a = a;
         this.b = b;
     }
