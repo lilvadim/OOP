@@ -1,4 +1,4 @@
-package ru.nsu.vadim.operations;
+package ru.nsu.vadim.console.operations;
 
 public class Sqrt extends Operation {
     public Sqrt(double a) {

@@ -1,4 +1,4 @@
-package ru.nsu.vadim.operations;
+package ru.nsu.vadim.console.operations;
 
 public class Pow extends Operation {
     public Pow(double a, double b) {

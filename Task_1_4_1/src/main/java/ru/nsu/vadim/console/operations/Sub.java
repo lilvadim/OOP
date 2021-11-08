@@ -1,4 +1,4 @@
-package ru.nsu.vadim.operations;
+package ru.nsu.vadim.console.operations;
 
 public class Sub extends Operation {
     public Sub(double a, double b) {
