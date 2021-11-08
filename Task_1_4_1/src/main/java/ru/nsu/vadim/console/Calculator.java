@@ -1,6 +1,9 @@
 package ru.nsu.vadim.console;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.EmptyStackException;
+import java.util.Stack;
 
 import static java.lang.Double.parseDouble;
 
@@ -13,40 +16,19 @@ public class Calculator {
 
     private final Stack<Double> stack = new Stack<>();
 
-    private static final List<String> UNARY_LIST = new ArrayList<>(
-            Arrays.asList(
-                    "sin", "cos", "log", "sqrt"
-            )
-    );
-
-    private static final List<String> BINARY_LIST = new ArrayList<>(
-            Arrays.asList(
-                    "+", "-", "/", "*", "pow"
-            )
-    );
-
-    private static boolean isUnaryOperationToken(String token) {
-        return UNARY_LIST.contains(token);
-    }
-
-    private static boolean isBinaryOperationToken(String token) {
-        return BINARY_LIST.contains(token);
-    }
-
     public double calculate() throws NumberFormatException, EmptyStackException, ArithmeticException {
-        ArrayList<String> tokens = new ArrayList<>(
-                Arrays.stream(input
-                                .split(" ")).
+        final ArrayList<String> tokens = new ArrayList<>(
+                Arrays.stream(input.split(" ")).
                         filter(t -> !t.isEmpty() && !t.isBlank())
                         .toList());
 
         for (int i = tokens.size() - 1; i >= 0; i--) {
             String word = tokens.get(i);
             OperationFabric fab = new OperationFabric();
-            if (isUnaryOperationToken(word)) {
+            if (OperationFabric.isUnaryOperationToken(word)) {
                 double a = stack.pop();
                 stack.push(fab.createOperation(word, a).apply());
-            } else if (isBinaryOperationToken(word)) {
+            } else if (OperationFabric.isBinaryOperationToken(word)) {
                 double a = stack.pop();
                 double b = stack.pop();
                 stack.push(fab.createOperation(word, a, b).apply());
