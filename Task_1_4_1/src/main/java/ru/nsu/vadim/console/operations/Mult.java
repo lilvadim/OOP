@@ -1,4 +1,4 @@
-package ru.nsu.vadim.operations;
+package ru.nsu.vadim.console.operations;
 
 public class Mult extends Operation {
     public Mult(double a, double b) {

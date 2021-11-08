@@ -1,4 +1,4 @@
-package ru.nsu.vadim.operations;
+package ru.nsu.vadim.console.operations;
 
 public class Div extends Operation {
     public Div(double a, double b) {

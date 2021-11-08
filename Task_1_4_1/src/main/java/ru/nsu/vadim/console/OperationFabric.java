@@ -1,6 +1,6 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.console;
 
-import ru.nsu.vadim.operations.*;
+import ru.nsu.vadim.console.operations.*;
 
 public class OperationFabric {
     public Operation createOperation(String operationToken, double a, double b) {

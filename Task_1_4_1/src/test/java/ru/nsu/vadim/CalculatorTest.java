@@ -2,6 +2,9 @@ package ru.nsu.vadim;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.nsu.vadim.console.Calculator;
+
+import java.util.EmptyStackException;
 
 import static java.lang.Math.*;
 
@@ -65,5 +68,31 @@ public class CalculatorTest {
     void multiple_test() {
         String str = "+ sin 30 sqrt + 60 4";
         Assertions.assertEquals(sin(30) + sqrt(60 + 4), new Calculator(str).calculate());
+    }
+
+    @Test
+    void emptyStackException_test() {
+        String str = "sin";
+        Assertions.assertThrows(EmptyStackException.class, () -> new Calculator(str).calculate());
+    }
+
+    @Test
+    void numberFormatException_test() {
+        String str = "sinus 120";
+        Assertions.assertThrows(NumberFormatException.class, () -> new Calculator(str).calculate());
+    }
+
+    @Test
+    void multipleSpaces_test() {
+        String spaceStr = "cos   pow 12    + 2 0     ";
+        String refStr = "cos pow 12 + 2 0";
+        Assertions.assertEquals(
+                new Calculator(refStr).calculate(),
+                new Calculator(spaceStr).calculate()
+        );
+        Assertions.assertEquals(
+                cos(pow(12, (2 + 0))),
+                new Calculator(spaceStr).calculate()
+        );
     }
 }
