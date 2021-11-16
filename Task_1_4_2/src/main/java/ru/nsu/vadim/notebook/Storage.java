@@ -3,13 +3,15 @@ package ru.nsu.vadim.notebook;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
-import java.util.*;
-
-import static java.util.stream.Collectors.toList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Storage {
     private GsonBuilder gsonBuilder;
