@@ -5,8 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba9bc3c4-a88b-4b1f-af9e-b591b2d8e98a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Task_1_3_2/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Task_1_3_2/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Task_1_3_2/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../Task_1_3_2/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/runConfigurations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/src/main/java/ru/nsu/vadim/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/src/main/java/ru/nsu/vadim/notebook/Note.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/src/main/java/ru/nsu/vadim/notebook/Storage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/src/main/resources/memory.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Task_1_4_2/src/test/java/ru/nsu/vadim/NotebookTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,6 +177,7 @@
       <workItem from="1632819224068" duration="1463000" />
       <workItem from="1633965089826" duration="617000" />
       <workItem from="1634835657383" duration="7000" />
+      <workItem from="1637068731645" duration="10000" />
     </task>
     <servers />
   </component>
