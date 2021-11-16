@@ -1,6 +1,5 @@
 package ru.nsu.vadim;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Application {

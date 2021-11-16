@@ -2,7 +2,7 @@ package ru.nsu.vadim.notebook;
 
 
 public class Note {
-//    из-за бага в gson тут именно String, а не LocalDateTime >:(
+    //    из-за бага в gson тут именно String, а не LocalDateTime >:(
     private String dateTime;
     private String title;
     private String text;
