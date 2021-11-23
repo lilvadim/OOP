@@ -1,8 +1,8 @@
 package ru.nsu.vadim;
 
 import org.junit.jupiter.api.Test;
-import ru.nsu.vadim.notebook.JsonNotebook;
 import ru.nsu.vadim.notebook.Note;
+import ru.nsu.vadim.notebook.json.JsonNotebook;
 
 import java.io.IOException;
 import java.nio.file.Files;
