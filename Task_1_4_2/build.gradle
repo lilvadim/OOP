@@ -21,11 +21,14 @@ test {
 }
 
 jar {
+    doFirst {
+        from {
+            configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+        }
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
     manifest {
         attributes 'Main-Class': 'ru.nsu.vadim.App'
     }
     dependsOn configurations.runtimeClasspath
-    from {
-        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
-    }
 }

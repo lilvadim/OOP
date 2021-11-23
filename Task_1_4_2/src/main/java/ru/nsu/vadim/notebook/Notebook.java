@@ -1,6 +1,5 @@
 package ru.nsu.vadim.notebook;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -26,13 +25,13 @@ public class Notebook {
                 new Note(dateTime, title, text));
     }
 
-    public List<Note> getNoteListSortedByCreationDate() throws IOException {
+    public List<Note> getNoteListSortedByCreationDate() {
         return noteList.stream().sorted(
                 Comparator.comparing(Note::getDateTime)
         ).toList();
     }
 
-    public List<Note> getNoteListByInterval(LocalDateTime from, LocalDateTime to) throws IOException {
+    public List<Note> getNoteListByInterval(LocalDateTime from, LocalDateTime to) {
         return getNoteListSortedByCreationDate().stream().filter(
                 n -> n.getDateTime().compareTo(from) >= 0
                         && n.getDateTime().compareTo(to) <= 0
