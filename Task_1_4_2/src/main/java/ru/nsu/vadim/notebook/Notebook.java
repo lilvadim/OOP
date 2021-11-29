@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Notebook {
     private List<Note> noteList;
@@ -18,7 +19,7 @@ public class Notebook {
     public void remove(String title) {
         noteList = noteList.stream()
                 .filter(n -> !n.getTitle().equals(title))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
@@ -30,7 +31,6 @@ public class Notebook {
      */
     public void add(LocalDateTime dateTime, String title, String text) {
         remove(title);
-        noteList = new ArrayList<>(noteList);
         noteList.add(
                 new Note(dateTime, title, text));
     }

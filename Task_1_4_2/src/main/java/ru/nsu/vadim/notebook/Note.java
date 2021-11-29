@@ -8,7 +8,6 @@ import java.util.Objects;
  * Note class contains title, text and date
  */
 public class Note {
-    //    из-за бага в gson тут именно String, а не LocalDateTime >:(
     private LocalDateTime dateTime;
     private String title;
     private String text;
