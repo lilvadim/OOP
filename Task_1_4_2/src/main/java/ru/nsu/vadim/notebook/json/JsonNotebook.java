@@ -58,7 +58,8 @@ public class JsonNotebook {
      *
      * @return notebook
      */
-    public Notebook getNotebook() {
+    public Notebook getNotebook() throws IOException {
+        loadFile();
         return notebook;
     }
 
