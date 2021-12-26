@@ -21,7 +21,7 @@ class TreeIteratorBFS<E> implements Iterator<E> {
 
     @Override
     public E next() {
-        if (queue.isEmpty()) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
         var current = queue.remove();

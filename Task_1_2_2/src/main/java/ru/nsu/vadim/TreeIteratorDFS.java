@@ -20,7 +20,7 @@ public class TreeIteratorDFS<E> implements Iterator<E> {
 
     @Override
     public E next() {
-        if (stack.isEmpty()) {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
         var current = stack.pop();
