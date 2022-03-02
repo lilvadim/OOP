@@ -58,7 +58,7 @@ public class Runner {
         List<List<Integer>> chunks = new ArrayList<>();
         for (int i = 0; i < inputSize; i = min(i + chunkSize, inputSize)) {
             int nextIter = min(i + chunkSize, inputSize);
-            chunks.add(input.subList(i, nextIter));
+            chunks.add(unmodifiableList(input.subList(i, nextIter)));
         }
 
         AtomicBoolean flag = new AtomicBoolean(false);
