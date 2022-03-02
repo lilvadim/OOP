@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Math.min;
+import static java.util.Collections.unmodifiableList;
 import static ru.vadim.prime_threads.utils.Primes.isPrime;
 
 public class Runner {
@@ -20,7 +21,7 @@ public class Runner {
      * @param input list to process
      */
     public Runner(List<Integer> input) {
-        this.input = input;
+        this.input = unmodifiableList(input);
         inputSize = input.size();
     }
 
