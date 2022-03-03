@@ -29,20 +29,40 @@ public class Benchmark {
      */
     public static void printResults(Runner runner) {
         for (var method : runner.getClass().getDeclaredMethods()) {
-            if (method.getReturnType() == boolean.class
-                    && method.getParameterCount() == 0) {
+            if (method.getReturnType() == boolean.class) {
 
                 AtomicBoolean returned = new AtomicBoolean();
 
-                long time = Benchmark.executionTime(() -> {
-                    returned.set((boolean) method.invoke(runner));
-                    return returned.get();
-                });
+                long time = 0;
+                if (method.getParameterCount() == 0) {
 
-                System.out.println("> " + method.getName());
-                System.out.println("time: " + time);
-                System.out.println("returned: " + returned);
-                System.out.println();
+                    time = Benchmark.executionTime(() -> {
+                        returned.set((boolean) method.invoke(runner));
+                        return returned.get();
+                    });
+
+                    System.out.println("> " + method.getName());
+                    System.out.println("time: " + time);
+                    System.out.println("returned: " + returned);
+                    System.out.println();
+                } else if (method.getParameterCount() == 1
+                        && method.getParameterTypes()[0] == int.class) {
+
+                    System.out.println("> " + method.getName() + " with different number of threads");
+                    for (int threadsCnt = 2; threadsCnt < 11; threadsCnt++) {
+
+                        final int finalThreadsCnt = threadsCnt;
+                        time = Benchmark.executionTime(() -> {
+                            returned.set((boolean) method.invoke(runner, finalThreadsCnt));
+                            return returned.get();
+                        });
+
+                        System.out.println("threads: " + threadsCnt);
+                        System.out.println("time: " + time);
+                        System.out.println("returned: " + returned);
+                        System.out.println();
+                    }
+                }
             }
         }
     }
