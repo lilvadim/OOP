@@ -10,7 +10,7 @@ import java.util.List;
  * Generates list of numbers such that all numbers are semi-prime and last one is prime.
  */
 public class TestInputGenerator {
-
+// TODO: инвертировать задачу
     public final static int PRIME = 1048571;
     public final static int SEMI_PRIME = 1048561;
     private final int size;
