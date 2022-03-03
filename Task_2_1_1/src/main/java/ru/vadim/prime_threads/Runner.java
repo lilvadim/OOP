@@ -1,7 +1,5 @@
 package ru.vadim.prime_threads;
 
-import ru.vadim.prime_threads.utils.Primes;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -106,6 +104,6 @@ public class Runner {
      * @return if any prime number
      */
     public boolean runParallelStream() {
-        return input.parallelStream().anyMatch(Primes::isPrime);
+        return input.parallelStream().anyMatch(n -> !isPrime(n));
     }
 }
