@@ -51,10 +51,12 @@ public class Runner {
     /**
      * Runs threads, every thread processes one chunk of list
      *
-     * @param chunkSize size of chunks
+     * @param threadsCnt number of thread to use
      * @return if any prime number
      */
-    public boolean runThreads(int chunkSize) {
+    public boolean runThreads(int threadsCnt) {
+        int chunkSize = inputSize / threadsCnt;
+
         List<List<Integer>> chunks = new ArrayList<>();
         for (int i = 0; i < inputSize; i = min(i + chunkSize, inputSize)) {
             int nextIter = min(i + chunkSize, inputSize);
@@ -95,7 +97,7 @@ public class Runner {
      * @return if any prime number
      */
     public boolean runThreads() {
-        return runThreads(inputSize / Runtime.getRuntime().availableProcessors());
+        return runThreads(Runtime.getRuntime().availableProcessors());
     }
 
     /**
