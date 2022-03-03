@@ -32,7 +32,7 @@ public class Runner {
      */
     public boolean runSingleThreadFor() {
         for (int number : input) {
-            if (isPrime(number)) {
+            if (!isPrime(number)) {
                 return true;
             }
         }
@@ -45,7 +45,7 @@ public class Runner {
      * @return if any prime number
      */
     public boolean runSingleThreadStream() {
-        return input.stream().anyMatch(Primes::isPrime);
+        return input.stream().anyMatch(n -> !isPrime(n));
     }
 
     /**
@@ -69,7 +69,7 @@ public class Runner {
                     if (flag.get()) {
                         break;
                     }
-                    if (isPrime(number)) {
+                    if (!isPrime(number)) {
                         flag.set(true);
                     }
                 }
