@@ -42,7 +42,15 @@ public class Application {
                 new Pizza(1000)
         ));
 
-        bakers.forEach(PizzaBaker::run);
-        deliverers.forEach(PizzaDeliverer::run);
+        Thread thread = new Thread(() -> deliverers.forEach(PizzaDeliverer::run));
+        Thread thread1 = new Thread(() -> bakers.forEach(PizzaBaker::run));
+        thread.start();
+        thread1.start();
+        try {
+            thread.join();
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
