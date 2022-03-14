@@ -1,4 +1,4 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.collection;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -14,6 +14,10 @@ public class LimitedCapacityQueue<E> implements Queue<E> {
             throw new IllegalArgumentException("Capacity must be positive");
         }
         this.capacity = capacity;
+    }
+
+    public boolean isFull() {
+        return queue.size() == capacity;
     }
 
     @Override
