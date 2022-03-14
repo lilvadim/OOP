@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-public abstract class Consumer<I> {
+public abstract class Consumer<I> implements Runnable {
     @JsonIgnore
-    private final Queue<I> storage;
+    protected final Queue<I> storage;
 
     protected Consumer(Queue<I> storage) {
         this.storage = storage;

@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
-public abstract class Producer<I> {
+public abstract class OrdersProducer<I> implements Runnable {
     @JsonIgnore
-    private final Queue<I> orders;
+    protected final Queue<I> orders;
     @JsonIgnore
-    private final Queue<I> storage;
+    protected final Queue<I> storage;
 
-    protected Producer(Queue<I> orders, Queue<I> storage) {
+    protected OrdersProducer(Queue<I> orders, Queue<I> storage) {
         this.orders = orders;
         this.storage = storage;
     }
