@@ -52,7 +52,6 @@ public class PizzaBaker extends OrdersProducer<Pizza> implements Serializable {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
             putToStorage(pizza);
             System.out.println(this + ": " + pizza + " baked.");

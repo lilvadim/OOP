@@ -41,8 +41,10 @@ public class PizzaDeliverer extends Consumer<Pizza> implements Serializable {
     }
 
     public Pizza deliver(Pizza pizza) {
+        final int MIN_TIME = 10;
+        final int MAX_TIME = 1000;
         try {
-            sleep(new Random().nextInt(1000));
+            sleep((new Random().nextInt(MAX_TIME) + MIN_TIME) % MAX_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
