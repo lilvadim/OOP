@@ -13,13 +13,20 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
-public class PizzaBaker extends OrdersProducer<Pizza> implements Serializable {
+public class PizzaBaker implements Serializable, Runnable {
 
+    private final Queue<Pizza> orders;
+    private final LimitedCapacityQueue<Pizza> storage;
     private final int workTime;
     private final Period workExperiencePeriod;
 
-    public PizzaBaker(Queue<Pizza> orders, LimitedCapacityQueue<Pizza> storage, int workTime, Period workExperiencePeriod) {
-        super(orders, storage);
+    public PizzaBaker(
+            Queue<Pizza> orders,
+            LimitedCapacityQueue<Pizza> storage,
+            int workTime,
+            Period workExperiencePeriod) {
+        this.orders = orders;
+        this.storage = storage;
         this.workTime = workTime;
         this.workExperiencePeriod = workExperiencePeriod;
     }
@@ -40,7 +47,7 @@ public class PizzaBaker extends OrdersProducer<Pizza> implements Serializable {
                     e.printStackTrace();
                 }
             }
-            pizza = getOrder();
+            pizza = orders.remove();
             System.out.println(this + ": " + pizza + " order accepted.");
             orders.notifyAll();
         }
@@ -53,7 +60,7 @@ public class PizzaBaker extends OrdersProducer<Pizza> implements Serializable {
                     e.printStackTrace();
                 }
             }
-            putToStorage(pizza);
+            storage.add(pizza);
             System.out.println(this + ": " + pizza + " baked.");
             storage.notifyAll();
         }

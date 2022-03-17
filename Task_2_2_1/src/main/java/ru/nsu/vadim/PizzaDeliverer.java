@@ -11,11 +11,14 @@ import java.util.Random;
 
 import static java.lang.Thread.sleep;
 
-public class PizzaDeliverer extends Consumer<Pizza> implements Serializable {
+public class PizzaDeliverer implements Serializable, Runnable {
+    private final LimitedCapacityQueue<Pizza> storage;
     private final int capacity;
 
-    public PizzaDeliverer(LimitedCapacityQueue<Pizza> storage, int capacity) {
-        super(storage);
+    public PizzaDeliverer(
+            LimitedCapacityQueue<Pizza> storage,
+            int capacity) {
+        this.storage = storage;
         this.capacity = capacity;
     }
 
@@ -34,7 +37,7 @@ public class PizzaDeliverer extends Consumer<Pizza> implements Serializable {
                     e.printStackTrace();
                 }
             }
-            Pizza pizza = deliver(getFromStorage());
+            Pizza pizza = deliver(storage.remove());
             System.out.println(this + ": " + pizza + " delivered.");
             storage.notifyAll();
         }
