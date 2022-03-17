@@ -5,15 +5,23 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Queue;
 
+import static java.util.Objects.requireNonNull;
+
 public class LimitedCapacityQueue<E> implements Queue<E> {
     private final int capacity;
-    private final Queue<E> queue = new ArrayDeque<>();
+    private final Queue<E> queue;
 
-    public LimitedCapacityQueue(int capacity) {
+    public LimitedCapacityQueue(int capacity, Queue<E> queue) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("Capacity must be positive");
+        } else {
+            this.capacity = capacity;
         }
-        this.capacity = capacity;
+        this.queue = requireNonNull(queue);
+    }
+
+    public LimitedCapacityQueue(int capacity) {
+        this(capacity, new ArrayDeque<>());
     }
 
     public boolean isFull() {
