@@ -44,7 +44,7 @@ public class PizzeriaEmployeeManagerTest {
     @Test
     void saveEmployeesToJson() throws Exception {
         File file = new File("employees.json");
-        manager.saveEmployeesToJson(file);
+        manager.saveAllEmployeesToJson(file);
 
         String json = Files.readString(file.toPath());
         Assertions.assertTrue(json.contains(WorkExperience.LESS_THAN_YEAR.toString()));

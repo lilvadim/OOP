@@ -10,6 +10,7 @@ public abstract class AbstractEmployee implements Employee {
         this.workExperience = workExperience;
     }
 
+    @Override
     public long getId() {
         return id;
     }
