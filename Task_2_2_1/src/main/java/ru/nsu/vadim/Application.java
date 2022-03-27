@@ -32,14 +32,28 @@ public class Application {
     private static final AtomicBoolean active = new AtomicBoolean(false);
 
     public static void main(String[] args) {
-        EmployeeManager employeeManager = new PizzeriaEmployeeManager();
-        inject(employeeManager);
-        ExecutorService executorService = Executors.newFixedThreadPool(N + M);
-        active.set(true);
-        employeeManager.getEmployees(PizzaCooker.class).forEach(executorService::submit);
-        employeeManager.getEmployees(PizzaDeliverer.class).forEach(executorService::submit);
         generateOrders(10);
         printOrders();
+
+        EmployeeManager employeeManager = new PizzeriaEmployeeManager();
+        inject(employeeManager);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        active.set(true);
+
+        employeeManager.getEmployees(PizzaDeliverer.class).forEach(executorService::submit);
+        employeeManager.getEmployees(PizzaCooker.class).forEach(executorService::submit);
+
+        while (!orders.isEmpty()) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        printOrders();
+        active.set(false);
+        executorService.shutdown();
     }
 
     private static void inject(EmployeeManager employeeManager) {

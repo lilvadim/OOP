@@ -14,7 +14,7 @@ public class OrderConsumer<T> implements BiConsumer<Order<T>, Consumer<Order<T>>
     }
 
     @Override
-    public void accept(Order<T> order, Consumer<Order<T>> orderConsumer) {
+    public void accept(Order<T> order, Consumer<Order<T>> processOrder) {
         synchronized (orders) {
             while (orders.isFull()) {
                 try {
@@ -23,9 +23,9 @@ public class OrderConsumer<T> implements BiConsumer<Order<T>, Consumer<Order<T>>
                     e.printStackTrace();
                 }
             }
-            orderConsumer.accept(order);
+            processOrder.accept(order);
             orders.add(order);
-            order.notifyAll();
+            orders.notifyAll();
         }
     }
 }
