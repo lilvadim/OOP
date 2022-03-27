@@ -3,6 +3,7 @@ package ru.nsu.vadim;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import ru.nsu.vadim.collection.LimitedCapacityQueue;
+import ru.nsu.vadim.data.Pizza;
 
 import java.io.File;
 import java.io.IOException;

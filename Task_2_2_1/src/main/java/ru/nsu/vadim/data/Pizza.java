@@ -1,4 +1,4 @@
-package ru.nsu.vadim;
+package ru.nsu.vadim.data;
 
 public record Pizza(int cost) {
 }
