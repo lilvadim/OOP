@@ -3,23 +3,23 @@ package ru.nsu.vadim.data;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-public class PizzaOrder {
+public class Order<T> {
 
     private final long id;
-    private final Collection<? extends Pizza> pizzas;
+    private final Collection<? extends T> items;
     private OrderStatus status;
     private final LocalDateTime time;
     private final long locationCoords;
 
-    public PizzaOrder(
+    public Order(
             long id,
-            Collection<? extends Pizza> pizzas,
+            Collection<? extends T> items,
             OrderStatus status,
             LocalDateTime time,
             long locationCoords) {
 
         this.id = id;
-        this.pizzas = pizzas;
+        this.items = items;
         this.status = status;
         this.time = time;
         this.locationCoords = locationCoords;
@@ -29,8 +29,8 @@ public class PizzaOrder {
         return id;
     }
 
-    public Collection<? extends Pizza> getPizzas() {
-        return pizzas;
+    public Collection<? extends T> getItems() {
+        return items;
     }
 
     public OrderStatus getStatus() {
@@ -51,9 +51,8 @@ public class PizzaOrder {
 
     @Override
     public String toString() {
-        String string = getClass().getSimpleName() + " "
+        return getClass().getSimpleName() + " "
                 + "ID=" + getId() + "  "
                 + "STATUS=" + getStatus();
-        return string;
     }
 }

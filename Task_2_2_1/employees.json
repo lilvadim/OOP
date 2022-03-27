@@ -1,0 +1,59 @@
+{
+  "employees": [
+    "java.util.ArrayList",
+    [
+      [
+        "ru.nsu.vadim.pizzeria.PizzaCooker",
+        {
+          "id": 1,
+          "workExperience": "PROBATIONER"
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaDeliverer",
+        {
+          "id": 2,
+          "workExperience": "LESS_THAN_YEAR",
+          "capacity": 1
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaCooker",
+        {
+          "id": 3,
+          "workExperience": "EXPERT"
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaCooker",
+        {
+          "id": 4,
+          "workExperience": "EXPERT"
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaCooker",
+        {
+          "id": 5,
+          "workExperience": "EXPERT"
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaDeliverer",
+        {
+          "id": 6,
+          "workExperience": "EXPERT",
+          "capacity": 2
+        }
+      ],
+      [
+        "ru.nsu.vadim.pizzeria.PizzaDeliverer",
+        {
+          "id": 7,
+          "workExperience": "EXPERT",
+          "capacity": 3
+        }
+      ]
+    ]
+  ]
+}

@@ -2,8 +2,9 @@ package ru.nsu.vadim.pizzeria;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
-import ru.nsu.vadim.data.PizzaOrder;
+import ru.nsu.vadim.data.Pizza;
 import ru.nsu.vadim.employee.AbstractEmployee;
 import ru.nsu.vadim.employee.Deliverer;
 import ru.nsu.vadim.employee.WorkExperience;
@@ -13,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
-public class PizzaDeliverer extends AbstractEmployee implements Deliverer {
+public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza> {
 
     @JsonProperty("capacity")
     private final int capacity;
@@ -28,17 +29,17 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer {
     }
 
     @Override
-    public void deliver(PizzaOrder pizzaOrder) {
-        pizzaOrder.setStatus(OrderStatus.DELIVERING);
-        System.out.println(this + " : " + pizzaOrder);
+    public void deliver(Order<Pizza> order) {
+        order.setStatus(OrderStatus.DELIVERING);
+        System.out.println(this + " : " + order);
         try {
             sleep(TimeUnit.MILLISECONDS.toMillis(getWorkExperience().timeOfCompletingTask())
                     * new Random().nextInt(5));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        pizzaOrder.setStatus(OrderStatus.COMPLETE);
-        System.out.println(this + " : " + pizzaOrder);
+        order.setStatus(OrderStatus.COMPLETE);
+        System.out.println(this + " : " + order);
     }
 
     @Override

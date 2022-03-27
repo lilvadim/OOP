@@ -1,7 +1,7 @@
 package ru.nsu.vadim.employee;
 
-import ru.nsu.vadim.data.PizzaOrder;
+import ru.nsu.vadim.data.Order;
 
-public interface Cooker extends Employee {
-    void cook(PizzaOrder pizzaOrder);
+public interface Cooker<T> extends Employee {
+    void cook(Order<T> order);
 }
