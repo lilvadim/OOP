@@ -23,14 +23,8 @@ public class OrderSupplier<T> implements Supplier<Order<T>> {
                 }
             }
             Order<T> order = orders.remove();
-            order.notifyAll();
+            orders.notifyAll();
             return order;
-        }
-    }
-
-    public boolean isEmpty() {
-        synchronized (orders) {
-            return orders.isEmpty();
         }
     }
 }

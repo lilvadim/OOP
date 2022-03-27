@@ -56,7 +56,7 @@ public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runn
         order.setStatus(OrderStatus.COOKING);
         System.out.println(this + " : " + order);
         try {
-            sleep(TimeUnit.MILLISECONDS.toMillis(getWorkExperience().timeOfCompletingTask()));
+            sleep(TimeUnit.MILLISECONDS.toMillis(getWorkExperience().timeOfCompletingTask()) / 10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -65,9 +65,10 @@ public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runn
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         while (active.get()) {
-            orderConsumer.accept(orderSupplier.get(), this::cook);
+            Order<Pizza> order = orderSupplier.get();
+            orderConsumer.accept(order, this::cook);
         }
     }
 }

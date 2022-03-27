@@ -43,7 +43,7 @@ public class PizzeriaEmployeeManagerTest {
 
     @Test
     void saveEmployeesToJson() throws Exception {
-        File file = new File("employees.json");
+        File file = new File("employees_test.json");
         manager.saveAllEmployeesToJson(file);
 
         String json = Files.readString(file.toPath());
@@ -55,7 +55,7 @@ public class PizzeriaEmployeeManagerTest {
     @Test
     void addEmployeesFromJson() throws Exception {
         EmployeeManager employeeManager = new PizzeriaEmployeeManager();
-        employeeManager.addEmployeesFromJson(new File("employees.json"));
+        employeeManager.addEmployeesFromJson(new File("employees_test.json"));
 
         Assertions.assertEquals(manager.getAllEmployees().size(), employeeManager.getAllEmployees().size());
     }

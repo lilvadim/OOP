@@ -64,7 +64,6 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        baggage.remove(order);
         order.setStatus(OrderStatus.COMPLETE);
         System.out.println(this + " : " + order);
     }
@@ -75,13 +74,12 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         while (active.get()) {
-            while (baggage.size() < capacity
-                    || (orderSupplier.isEmpty() && !baggage.isEmpty())) {
-                baggage.add(orderSupplier.get());
-            }
+            baggage.add(orderSupplier.get());
+
             baggage.forEach(this::deliver);
+            baggage.clear();
         }
     }
 }
