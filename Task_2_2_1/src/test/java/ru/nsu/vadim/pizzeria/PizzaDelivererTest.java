@@ -2,9 +2,9 @@ package ru.nsu.vadim.pizzeria;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
-import ru.nsu.vadim.data.PizzaOrder;
 import ru.nsu.vadim.employee.Deliverer;
 import ru.nsu.vadim.employee.WorkExperience;
 
@@ -14,8 +14,8 @@ import java.util.List;
 public class PizzaDelivererTest {
     @Test
     void deliver() {
-        Deliverer deliverer = new PizzaDeliverer(1, WorkExperience.EXPERT, 1);
-        PizzaOrder pizzaOrder = new PizzaOrder(
+        Deliverer<Pizza> deliverer = new PizzaDeliverer(1, WorkExperience.EXPERT, 1);
+        Order<Pizza> order = new Order<>(
                 1L,
                 List.of(
                         new Pizza(200),
@@ -25,8 +25,8 @@ public class PizzaDelivererTest {
                 OrderStatus.READY_TO_DELIVERY,
                 LocalDateTime.now(),
                 256L);
-        deliverer.deliver(pizzaOrder);
+        deliverer.deliver(order);
 
-        Assertions.assertEquals(OrderStatus.COMPLETE, pizzaOrder.getStatus());
+        Assertions.assertEquals(OrderStatus.COMPLETE, order.getStatus());
     }
 }
