@@ -15,15 +15,17 @@ public class OrderConsumer<T> implements BiConsumer<Order<T>, Consumer<Order<T>>
 
     @Override
     public void accept(Order<T> order, Consumer<Order<T>> orderConsumer) {
-        while (orders.isFull()) {
-            try {
-                order.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        synchronized (orders) {
+            while (orders.isFull()) {
+                try {
+                    order.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            orderConsumer.accept(order);
+            orders.add(order);
+            order.notifyAll();
         }
-        orderConsumer.accept(order);
-        orders.add(order);
-        order.notifyAll();
     }
 }
