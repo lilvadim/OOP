@@ -1,15 +1,16 @@
 package ru.nsu.vadim.collection;
 
-import java.util.ArrayDeque;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Queue;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
 public class LimitedCapacityQueue<E> implements Queue<E> {
     private final int capacity;
-    private final Queue<E> queue;
+    private final Queue<E> wrapped;
 
     public LimitedCapacityQueue(int capacity, Queue<E> queue) {
         if (capacity <= 0) {
@@ -17,7 +18,7 @@ public class LimitedCapacityQueue<E> implements Queue<E> {
         } else {
             this.capacity = capacity;
         }
-        this.queue = requireNonNull(queue);
+        this.wrapped = requireNonNull(queue);
     }
 
     public LimitedCapacityQueue(int capacity) {
@@ -25,107 +26,145 @@ public class LimitedCapacityQueue<E> implements Queue<E> {
     }
 
     public boolean isFull() {
-        return queue.size() == capacity;
+        return wrapped.size() == capacity;
+    }
+
+    @Override
+    public boolean add(E e) {
+        if (wrapped.size() < capacity) {
+            return wrapped.add(e);
+        } else {
+            throw new IllegalStateException("Queue is full.");
+        }
+    }
+
+    @Override
+    public boolean offer(E e) {
+        return wrapped.offer(e);
+    }
+
+    @Override
+    public E remove() {
+        return wrapped.remove();
+    }
+
+    @Override
+    public E poll() {
+        return wrapped.poll();
+    }
+
+    @Override
+    public E element() {
+        return wrapped.element();
+    }
+
+    @Override
+    public E peek() {
+        return wrapped.peek();
     }
 
     @Override
     public int size() {
-        return queue.size();
+        return wrapped.size();
     }
 
     @Override
     public boolean isEmpty() {
-        return queue.isEmpty();
+        return wrapped.isEmpty();
     }
 
     @Override
     public boolean contains(Object o) {
-        return queue.isEmpty();
+        return wrapped.contains(o);
     }
 
     @Override
-    public Iterator iterator() {
-        return queue.iterator();
+    public Iterator<E> iterator() {
+        return wrapped.iterator();
     }
 
     @Override
     public Object[] toArray() {
-        return queue.toArray();
+        return wrapped.toArray();
     }
 
     @Override
-    public Object[] toArray(Object[] a) {
-        return queue.toArray(a);
+    public <T> T[] toArray(T[] a) {
+        return wrapped.toArray(a);
     }
 
     @Override
-    public boolean add(E o) {
-        if (queue.size() == capacity) {
-            throw new IllegalStateException("Queue is full");
-        } else {
-            return queue.add((E) o);
-        }
+    public <T> T[] toArray(IntFunction<T[]> generator) {
+        return wrapped.toArray(generator);
     }
 
     @Override
     public boolean remove(Object o) {
-        return queue.remove(o);
-    }
-
-    @Override
-    public boolean addAll(Collection c) throws IllegalStateException {
-        for (Object item : c) {
-            queue.add((E) item);
-        }
-        return true;
-    }
-
-    @Override
-    public void clear() {
-        queue.clear();
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return queue.retainAll(c);
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return queue.removeAll(c);
+        return wrapped.remove(o);
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return queue.containsAll(c);
+        return wrapped.containsAll(c);
     }
 
     @Override
-    public boolean offer(E o) {
-        try {
-            return queue.add(o);
-        } catch (IllegalStateException e) {
+    public boolean addAll(Collection<? extends E> c) {
+        c.forEach(this::add);
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return wrapped.removeAll(c);
+    }
+
+    @Override
+    public boolean removeIf(Predicate<? super E> filter) {
+        return wrapped.removeIf(filter);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return wrapped.retainAll(c);
+    }
+
+    @Override
+    public void clear() {
+        wrapped.clear();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Queue<?>) {
+            return wrapped.equals(o);
+        } else {
             return false;
         }
     }
 
     @Override
-    public E remove() {
-        return queue.remove();
+    public int hashCode() {
+        return wrapped.hashCode();
     }
 
     @Override
-    public E poll() {
-        return queue.poll();
+    public Spliterator<E> spliterator() {
+        return wrapped.spliterator();
     }
 
     @Override
-    public E element() {
-        return queue.element();
+    public Stream<E> stream() {
+        return wrapped.stream();
     }
 
     @Override
-    public E peek() {
-        return queue.peek();
+    public Stream<E> parallelStream() {
+        return wrapped.parallelStream();
+    }
+
+    @Override
+    public void forEach(Consumer<? super E> action) {
+        wrapped.forEach(action);
     }
 }
