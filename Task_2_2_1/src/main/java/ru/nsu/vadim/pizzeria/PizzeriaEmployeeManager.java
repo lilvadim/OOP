@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public class PizzeriaEmployeeManager implements EmployeeManager {
 
@@ -44,6 +45,14 @@ public class PizzeriaEmployeeManager implements EmployeeManager {
     }
 
     @Override
+    public Optional<Employee> getEmployee(long id) {
+        return employees.stream()
+                .filter(employee -> employee.getId() == id)
+                .findFirst();
+    }
+
+
+    @Override
     public List<Employee> getAllEmployees() {
         return employees.stream().toList();
     }
@@ -69,7 +78,19 @@ public class PizzeriaEmployeeManager implements EmployeeManager {
     }
 
     @Override
-    public void saveEmployeesToJson(File jsonFile) throws Exception {
+    public void saveAllEmployeesToJson(File jsonFile) throws Exception {
         objectMapper.writeValue(jsonFile, new EmployeesWrapper(new ArrayList<>(employees)));
     }
+
+    @Override
+    public boolean saveEmployeeToJson(File jsonFile, long id) throws Exception {
+        Optional<Employee> employee = getEmployee(id);
+        if (employee.isEmpty()) {
+            return false;
+        } else {
+            objectMapper.writeValue(jsonFile, employee.get());
+            return true;
+        }
+    }
+
 }
