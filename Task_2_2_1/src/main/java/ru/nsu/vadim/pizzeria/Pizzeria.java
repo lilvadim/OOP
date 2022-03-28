@@ -12,19 +12,16 @@ import java.util.concurrent.Executors;
 public class Pizzeria implements Runnable {
 
     private final Pipe<Order<Pizza>> storage;
-    private final int ordersLimit;
     private final EmployeeManager employeeManager;
     private final Pipe<Order<Pizza>> orders;
 
     public Pizzeria(
             EmployeeManager employeeManager,
             Pipe<Order<Pizza>> orders,
-            int storageCapacity,
-            int ordersLimit) {
+            int storageCapacity) {
         this.employeeManager = employeeManager;
         this.orders = orders;
         storage = new BlockingPipe<>(storageCapacity);
-        this.ordersLimit = ordersLimit;
         injectPipes(employeeManager);
     }
 

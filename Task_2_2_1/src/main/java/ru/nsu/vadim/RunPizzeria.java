@@ -15,7 +15,7 @@ import java.util.*;
 
 import static java.lang.Math.abs;
 
-public class Application {
+public class RunPizzeria {
 
     private static final int STORAGE_CAPACITY = 5;
     private static final int ORDERS_CNT = 10;
@@ -35,8 +35,7 @@ public class Application {
         Pizzeria pizzeria = new Pizzeria(
                 employeeManager,
                 orderPipe,
-                STORAGE_CAPACITY,
-                ORDERS_CNT
+                STORAGE_CAPACITY
         );
 
         pizzeria.run();
