@@ -2,7 +2,7 @@ package ru.nsu.vadim.concurrent;
 
 import java.util.function.Supplier;
 
-public interface CloseableSupplier<T> extends Supplier<T>, Closeable {
+public interface SupplyingPipeEnd<T> extends Supplier<T>, PipeEnd {
     boolean isEmpty();
 
     @Override

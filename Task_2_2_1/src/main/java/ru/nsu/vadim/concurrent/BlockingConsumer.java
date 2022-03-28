@@ -4,7 +4,7 @@ import ru.nsu.vadim.collection.LimitedCapacityQueue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BlockingConsumer<T> implements CloseableConsumer<T> {
+public class BlockingConsumer<T> implements ConsumingPipeEnd<T> {
     private final LimitedCapacityQueue<T> queue;
     private final AtomicBoolean supplierOpened;
     private final AtomicBoolean consumerOpened;

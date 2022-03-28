@@ -2,7 +2,7 @@ package ru.nsu.vadim.pizzeria;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.nsu.vadim.concurrent.CloseableSupplier;
+import ru.nsu.vadim.concurrent.SupplyingPipeEnd;
 import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
@@ -20,7 +20,7 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
 
     @JsonProperty("capacity")
     private final int capacity;
-    private CloseableSupplier<Order<Pizza>> orderSupplier;
+    private SupplyingPipeEnd<Order<Pizza>> orderSupplier;
     private final List<Order<Pizza>> baggage = new ArrayList<>();
 
     @JsonCreator
@@ -32,7 +32,7 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
         this.capacity = capacity;
     }
 
-    public void setOrderSupplier(CloseableSupplier<Order<Pizza>> orderSupplier) {
+    public void setOrderSupplier(SupplyingPipeEnd<Order<Pizza>> orderSupplier) {
         this.orderSupplier = orderSupplier;
     }
 

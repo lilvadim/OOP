@@ -3,7 +3,7 @@ package ru.nsu.vadim.concurrent;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class BlockingSupplier<T> implements CloseableSupplier<T> {
+public class BlockingSupplier<T> implements SupplyingPipeEnd<T> {
     private final Queue<T> queue;
     private final AtomicBoolean consumerOpened;
     private final AtomicBoolean supplierOpened;

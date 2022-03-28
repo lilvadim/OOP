@@ -1,7 +1,7 @@
 package ru.nsu.vadim.concurrent;
 
 public interface Pipe<T> {
-    CloseableSupplier<T> supplier();
+    SupplyingPipeEnd<T> supplier();
 
-    CloseableConsumer<T> consumer();
+    ConsumingPipeEnd<T> consumer();
 }
