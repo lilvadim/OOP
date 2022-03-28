@@ -1,6 +1,8 @@
 package ru.nsu.vadim;
 
 import ru.nsu.vadim.collection.LimitedCapacityQueue;
+import ru.nsu.vadim.concurrent.BlockingPipe;
+import ru.nsu.vadim.concurrent.Pipe;
 import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
@@ -17,7 +19,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.TimeUnit;
 
 import static java.lang.Math.abs;
 
@@ -26,50 +28,59 @@ public class Application {
     private static final int N = 2;
     private static final int M = 10;
     private static final int T = 5;
+    private static final int ORDERS_CNT = 10;
 
     private static final Queue<Order<Pizza>> orders = new ArrayDeque<>();
     private static final LimitedCapacityQueue<Order<Pizza>> storage = new LimitedCapacityQueue<>(T);
-    private static final AtomicBoolean active = new AtomicBoolean(false);
 
     public static void main(String[] args) {
-        generateOrders(10);
+        generateOrders(ORDERS_CNT);
         printOrders();
+        Pipe<Order<Pizza>> orders = new BlockingPipe<>(ORDERS_CNT);
+        Pipe<Order<Pizza>> storage = new BlockingPipe<>(T);
 
         EmployeeManager employeeManager = new PizzeriaEmployeeManager();
-        inject(employeeManager);
+        inject(employeeManager, orders, storage);
 
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        active.set(true);
 
-        employeeManager.getEmployees(PizzaDeliverer.class).forEach(executorService::submit);
         employeeManager.getEmployees(PizzaCooker.class).forEach(executorService::submit);
+        employeeManager.getEmployees(PizzaDeliverer.class).forEach(executorService::submit);
 
-        while (!orders.isEmpty()) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Application.orders.forEach(orders.consumer());
+
+        while (Order.getCompletedCount().get() <= ORDERS_CNT) {
+            if (Order.getCompletedCount().get() == ORDERS_CNT) {
+                System.out.println("ALL ORDERS COMPLETED!");
+                executorService.shutdown();
+                try {
+                    orders.consumer().close();
+                    if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
+                        executorService.shutdownNow();
+                    }
+                } catch (InterruptedException e) {
+                    executorService.shutdownNow();
+                }
+                break;
             }
         }
-        printOrders();
-        active.set(false);
-        executorService.shutdown();
     }
 
-    private static void inject(EmployeeManager employeeManager) {
+    private static void inject(
+            EmployeeManager employeeManager,
+            Pipe<Order<Pizza>> orders,
+            Pipe<Order<Pizza>> storage) {
         try {
             employeeManager.addEmployeesFromJson(new File("employees.json"));
         } catch (Exception e) {
             e.printStackTrace();
         }
         employeeManager.getEmployees(PizzaCooker.class).forEach(pizzaCooker -> {
-            pizzaCooker.setActive(active);
-            pizzaCooker.setStorage(storage);
-            pizzaCooker.setOrders(orders);
+            pizzaCooker.setOrderSupplier(orders.supplier());
+            pizzaCooker.setOrderConsumer(storage.consumer());
         });
         employeeManager.getEmployees(PizzaDeliverer.class).forEach(pizzaDeliverer -> {
-            pizzaDeliverer.setActive(active);
-            pizzaDeliverer.setStorage(storage);
+            pizzaDeliverer.setOrderSupplier(storage.supplier());
         });
     }
 

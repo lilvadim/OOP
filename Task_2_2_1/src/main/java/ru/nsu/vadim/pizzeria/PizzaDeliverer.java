@@ -2,19 +2,17 @@ package ru.nsu.vadim.pizzeria;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.nsu.vadim.concurrent.CloseableSupplier;
 import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
 import ru.nsu.vadim.employee.AbstractEmployee;
 import ru.nsu.vadim.employee.Deliverer;
-import ru.nsu.vadim.employee.OrderSupplier;
 import ru.nsu.vadim.employee.WorkExperience;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
@@ -22,20 +20,8 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
 
     @JsonProperty("capacity")
     private final int capacity;
-    private OrderSupplier<Pizza> orderSupplier;
-    private AtomicBoolean active;
+    private CloseableSupplier<Order<Pizza>> orderSupplier;
     private final List<Order<Pizza>> baggage = new ArrayList<>();
-
-    public PizzaDeliverer(
-            long id,
-            WorkExperience workExperience,
-            int capacity,
-            Queue<Order<Pizza>> storage,
-            AtomicBoolean active) {
-        this(id, workExperience, capacity);
-        this.active = active;
-        orderSupplier = new OrderSupplier<>(storage);
-    }
 
     @JsonCreator
     public PizzaDeliverer(
@@ -46,12 +32,8 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
         this.capacity = capacity;
     }
 
-    public void setStorage(Queue<Order<Pizza>> storage) {
-        orderSupplier = new OrderSupplier<>(storage);
-    }
-
-    public void setActive(AtomicBoolean active) {
-        this.active = active;
+    public void setOrderSupplier(CloseableSupplier<Order<Pizza>> orderSupplier) {
+        this.orderSupplier = orderSupplier;
     }
 
     @Override
@@ -64,8 +46,10 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        order.setStatus(OrderStatus.COMPLETE);
-        System.out.println(this + " : " + order);
+        synchronized (Order.getCompletedCount()) {
+            order.setStatus(OrderStatus.COMPLETE);
+            System.out.println(this + " : " + order);
+        }
     }
 
     @Override
@@ -75,9 +59,19 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
 
     @Override
     public synchronized void run() {
-        while (active.get()) {
-            baggage.add(orderSupplier.get());
-
+        running:
+        while (true) {
+            while (baggage.size() < capacity) {
+                if (orderSupplier.isEmpty() && !baggage.isEmpty()) {
+                    break;
+                } else {
+                    try {
+                        baggage.add(orderSupplier.get());
+                    } catch (IllegalStateException e) {
+                        break running;
+                    }
+                }
+            }
             baggage.forEach(this::deliver);
             baggage.clear();
         }
