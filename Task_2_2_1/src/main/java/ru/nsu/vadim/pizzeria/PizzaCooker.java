@@ -2,8 +2,8 @@ package ru.nsu.vadim.pizzeria;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.nsu.vadim.concurrent.CloseableConsumer;
-import ru.nsu.vadim.concurrent.CloseableSupplier;
+import ru.nsu.vadim.concurrent.ConsumingPipeEnd;
+import ru.nsu.vadim.concurrent.SupplyingPipeEnd;
 import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
@@ -17,8 +17,8 @@ import static java.lang.Thread.sleep;
 
 public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runnable {
 
-    private CloseableSupplier<Order<Pizza>> orderSupplier;
-    private CloseableConsumer<Order<Pizza>> orderConsumer;
+    private SupplyingPipeEnd<Order<Pizza>> orderSupplier;
+    private ConsumingPipeEnd<Order<Pizza>> orderConsumer;
 
     @JsonCreator
     public PizzaCooker(
@@ -27,11 +27,11 @@ public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runn
         super(id, workExperience);
     }
 
-    public void setOrderSupplier(CloseableSupplier<Order<Pizza>> orderSupplier) {
+    public void setOrderSupplier(SupplyingPipeEnd<Order<Pizza>> orderSupplier) {
         this.orderSupplier = orderSupplier;
     }
 
-    public void setOrderConsumer(CloseableConsumer<Order<Pizza>> orderConsumer) {
+    public void setOrderConsumer(ConsumingPipeEnd<Order<Pizza>> orderConsumer) {
         this.orderConsumer = orderConsumer;
     }
 

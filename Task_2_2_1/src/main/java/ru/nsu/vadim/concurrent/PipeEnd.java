@@ -1,5 +1,5 @@
 package ru.nsu.vadim.concurrent;
 
-public interface Closeable {
+public interface PipeEnd {
     void close();
 }

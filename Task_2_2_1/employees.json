@@ -43,7 +43,7 @@
         {
           "id": 6,
           "workExperience": "EXPERT",
-          "capacity": 1
+          "capacity": 3
         }
       ],
       [
@@ -51,7 +51,7 @@
         {
           "id": 7,
           "workExperience": "EXPERT",
-          "capacity": 1
+          "capacity": 2
         }
       ]
     ]
