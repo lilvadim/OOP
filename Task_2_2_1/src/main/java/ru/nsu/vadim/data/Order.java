@@ -2,9 +2,10 @@ package ru.nsu.vadim.data;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Order<T> {
-
+    private static AtomicInteger completedCount = new AtomicInteger(0);
     private final long id;
     private final Collection<? extends T> items;
     private OrderStatus status;
@@ -47,6 +48,9 @@ public class Order<T> {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+        if (status == OrderStatus.COMPLETE) {
+            completedCount.incrementAndGet();
+        }
     }
 
     @Override
@@ -54,5 +58,9 @@ public class Order<T> {
         return getClass().getSimpleName() + " "
                 + "ID=" + getId() + "  "
                 + "STATUS=" + getStatus();
+    }
+
+    public static AtomicInteger getCompletedCount() {
+        return completedCount;
     }
 }

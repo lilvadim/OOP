@@ -2,35 +2,23 @@ package ru.nsu.vadim.pizzeria;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import ru.nsu.vadim.collection.LimitedCapacityQueue;
+import ru.nsu.vadim.concurrent.CloseableConsumer;
+import ru.nsu.vadim.concurrent.CloseableSupplier;
 import ru.nsu.vadim.data.Order;
 import ru.nsu.vadim.data.OrderStatus;
 import ru.nsu.vadim.data.Pizza;
-import ru.nsu.vadim.employee.*;
+import ru.nsu.vadim.employee.AbstractEmployee;
+import ru.nsu.vadim.employee.Cooker;
+import ru.nsu.vadim.employee.WorkExperience;
 
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Thread.sleep;
 
 public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runnable {
 
-    private OrderSupplier<Pizza> orderSupplier;
-    private OrderConsumer<Pizza> orderConsumer;
-    private AtomicBoolean active;
-
-    public PizzaCooker(
-            long id,
-            WorkExperience workExperience,
-            Queue<Order<Pizza>> orders,
-            LimitedCapacityQueue<Order<Pizza>> storage,
-            AtomicBoolean active) {
-        this(id, workExperience);
-        this.active = active;
-        orderSupplier = new OrderSupplier<>(orders);
-        orderConsumer = new OrderConsumer<>(storage);
-    }
+    private CloseableSupplier<Order<Pizza>> orderSupplier;
+    private CloseableConsumer<Order<Pizza>> orderConsumer;
 
     @JsonCreator
     public PizzaCooker(
@@ -39,16 +27,12 @@ public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runn
         super(id, workExperience);
     }
 
-    public void setOrders(Queue<Order<Pizza>> orders) {
-        orderSupplier = new OrderSupplier<>(orders);
+    public void setOrderSupplier(CloseableSupplier<Order<Pizza>> orderSupplier) {
+        this.orderSupplier = orderSupplier;
     }
 
-    public void setStorage(LimitedCapacityQueue<Order<Pizza>> storage) {
-        orderConsumer = new OrderConsumer<>(storage);
-    }
-
-    public void setActive(AtomicBoolean active) {
-        this.active = active;
+    public void setOrderConsumer(CloseableConsumer<Order<Pizza>> orderConsumer) {
+        this.orderConsumer = orderConsumer;
     }
 
     @Override
@@ -66,9 +50,20 @@ public class PizzaCooker extends AbstractEmployee implements Cooker<Pizza>, Runn
 
     @Override
     public synchronized void run() {
-        while (active.get()) {
-            Order<Pizza> order = orderSupplier.get();
-            orderConsumer.accept(order, this::cook);
+        while (true) {
+            Order<Pizza> order;
+            try {
+                order = orderSupplier.get();
+            } catch (IllegalStateException e) {
+                orderConsumer.close();
+                break;
+            }
+            cook(order);
+            try {
+                orderConsumer.accept(order);
+            } catch (IllegalStateException e) {
+                break;
+            }
         }
     }
 }
