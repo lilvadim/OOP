@@ -46,10 +46,8 @@ public class PizzaDeliverer extends AbstractEmployee implements Deliverer<Pizza>
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        synchronized (Order.getCompletedCount()) {
-            order.setStatus(OrderStatus.COMPLETE);
-            System.out.println(this + " : " + order);
-        }
+        order.setStatus(OrderStatus.COMPLETE);
+        System.out.println(this + " : " + order);
     }
 
     @Override

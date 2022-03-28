@@ -8,7 +8,6 @@ import ru.nsu.vadim.employee.EmployeeManager;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 public class Pizzeria implements Runnable {
 
@@ -47,24 +46,7 @@ public class Pizzeria implements Runnable {
         employeeManager.getEmployees(PizzaCooker.class).forEach(executorService::submit);
         employeeManager.getEmployees(PizzaDeliverer.class).forEach(executorService::submit);
 
-        waitForCompleteAllThenStop(executorService);
-    }
-
-    private void waitForCompleteAllThenStop(ExecutorService executorService) {
-        while (Order.getCompletedCount().get() <= ordersLimit) {
-            if (Order.getCompletedCount().get() == ordersLimit) {
-                System.out.println("ALL ORDERS COMPLETED!");
-                executorService.shutdown();
-                try {
-                    orders.consumer().close();
-                    if (!executorService.awaitTermination(5, TimeUnit.SECONDS)) {
-                        executorService.shutdownNow();
-                    }
-                } catch (InterruptedException e) {
-                    executorService.shutdownNow();
-                }
-                break;
-            }
-        }
+        orders.consumer().close();
+        executorService.shutdown();
     }
 }

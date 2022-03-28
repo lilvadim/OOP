@@ -39,6 +39,13 @@ public class BlockingConsumer<T> implements ConsumingPipeEnd<T> {
     @Override
     public void close() {
         synchronized (queue) {
+            while (!queue.isEmpty()) {
+                try {
+                    queue.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             consumerOpened.set(false);
             queue.notifyAll();
         }
