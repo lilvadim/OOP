@@ -1,25 +1,29 @@
 package ru.nsu.vadim.snake;
 
+import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Snake {
 
     public static class SnakePoint extends Point {
-        public SnakePoint(int x, int y) {
+        private SnakePoint(int x, int y) {
             super(x, y);
         }
     }
 
-    private final Deque<Point> points;
+    private final Deque<SnakePoint> points;
     private SpeedVector speedVector;
 
-    public Snake(Deque<Point> points, SpeedVector speedVector) {
+    private Snake(Deque<SnakePoint> points, SpeedVector initialSpeed) {
         this.points = points;
-        this.speedVector = speedVector;
+        this.speedVector = initialSpeed;
     }
 
     public boolean move() {
-        Point head = new SnakePoint(
+        SnakePoint head = new SnakePoint(
                 points.getFirst().getX() * speedVector.getX(),
                 points.getFirst().getY() * speedVector.getY());
 
@@ -32,11 +36,17 @@ public class Snake {
         }
     }
 
-    public void setDirection(SpeedVector speedVector) {
+    public void setSpeedVector(SpeedVector speedVector) {
         this.speedVector = speedVector;
     }
 
-    public Deque<Point> getPoints() {
+    public Deque<SnakePoint> getPoints() {
         return points;
+    }
+
+    static Snake createOnePointSnake(int x, int y, SpeedVector initialSpeed) {
+        Deque<SnakePoint> snakePoints = new ArrayDeque<>();
+        snakePoints.add(new SnakePoint(x, y));
+        return new Snake(snakePoints, initialSpeed);
     }
 }

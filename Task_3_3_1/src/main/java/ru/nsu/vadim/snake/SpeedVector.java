@@ -10,4 +10,8 @@ public class SpeedVector extends Point {
     private SpeedVector(int x, int y) {
         super(x, y);
     }
+
+    public static SpeedVector multiply(int coefficient, SpeedVector speedVector) {
+        return new SpeedVector(speedVector.getX() * coefficient, speedVector.getY() * coefficient);
+    }
 }
