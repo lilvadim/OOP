@@ -5,17 +5,10 @@ import java.util.List;
 
 public class Field {
 
-    public static class EmptyFieldPoint extends Point {
-        public EmptyFieldPoint(int x, int y) {
-            super(x, y);
-        }
-    }
-
     private static final String OUT_OF_BOUNDS_MSG = "Out of bounds";
     private final int WIDTH;
     private final int HEIGHT;
     private final List<List<Point>> points;
-
     public Field(
             int width,
             int height) {
@@ -50,5 +43,11 @@ public class Field {
 
     public int getHeight() {
         return HEIGHT;
+    }
+
+    public static class EmptyFieldPoint extends Point {
+        public EmptyFieldPoint(int x, int y) {
+            super(x, y);
+        }
     }
 }
