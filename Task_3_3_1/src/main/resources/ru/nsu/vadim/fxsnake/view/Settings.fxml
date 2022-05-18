@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
+      xmlns="http://javafx.com/javafx"
+      fx:controller="ru.nsu.vadim.fxsnake.view.SettingsController"
+      prefHeight="600.0" prefWidth="600.0" style="-fx-padding: 50;" spacing="20">
+    <Label text="Settings" style="-fx-font-size: 20"/>
+    <HBox spacing="10">
+        <Label text="Width"/>
+        <Label fx:id="widthVal" text="-"/>
+        <Slider fx:id="widthSlider"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Height"/>
+        <Label fx:id="heightVal" text="-"/>
+        <Slider fx:id="heightSlider"/>
+    </HBox>
+    <HBox spacing="10">
+        <Label text="Scale"/>
+        <HBox>
+            <Label fx:id="scaleVal" text="-"/>
+            <Label text="\%"/>
+        </HBox>
+        <Slider fx:id="scaleSlider"/>
+    </HBox>
+    <fx:define>
+        <ToggleGroup fx:id="scoresOpt"/>
+    </fx:define>
+    <Label text="Scores"/>
+    <RadioButton toggleGroup="$scoresOpt" text="Reach the goal"/>
+    <RadioButton toggleGroup="$scoresOpt" text="Unlimited"/>
+    <VBox VBox.vgrow="ALWAYS"/>
+    <HBox>
+        <Button text="Close" onAction="#closeWindow"/>
+        <Label fx:id="restartWarning"/>
+    </HBox>
+</VBox>

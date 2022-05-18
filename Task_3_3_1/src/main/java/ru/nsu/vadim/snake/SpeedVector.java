@@ -1,17 +1,24 @@
 package ru.nsu.vadim.snake;
 
-public class SpeedVector extends Point {
+public enum SpeedVector implements XYPair {
 
-    public static final SpeedVector UP = new SpeedVector(0, +1);
-    public static final SpeedVector DOWN = new SpeedVector(0, -1);
-    public static final SpeedVector LEFT = new SpeedVector(-1, 0);
-    public static final SpeedVector RIGHT = new SpeedVector(+1, 0);
+    UP(0, -1),
+    DOWN(0, +1),
+    LEFT(-1, 0),
+    RIGHT(+1, 0);
+    private final int x;
+    private final int y;
 
-    private SpeedVector(int x, int y) {
-        super(x, y);
+    SpeedVector(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public static SpeedVector multiply(int coefficient, SpeedVector speedVector) {
-        return new SpeedVector(speedVector.getX() * coefficient, speedVector.getY() * coefficient);
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

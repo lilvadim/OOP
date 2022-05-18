@@ -3,15 +3,22 @@ package ru.nsu.vadim.fxsnake;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 
 import javax.inject.Inject;
-import java.util.logging.Level;
+import javax.inject.Named;
+import javax.inject.Provider;
 import java.util.logging.Logger;
 
 public class SnakeApplication extends Application {
 
     private final Injector injector = Guice.createInjector(new AppModule());
+    @Inject
+    @Named("MainMenu")
+    private Provider<FXMLLoader> mainMenuLoaderProvider;
 
     @Inject
     private Logger logger;
@@ -19,16 +26,21 @@ public class SnakeApplication extends Application {
     @Override
     public void init() throws Exception {
         injector.injectMembers(this);
-        logger.log(Level.INFO, "Injected");
+        logger.info("Injected");
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        logger.log(Level.INFO, "Parameters: " + getParameters().getRaw());
+        logger.info("Parameters: " + getParameters().getRaw());
+        primaryStage.setScene(new Scene(mainMenuLoaderProvider.get().load()));
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        primaryStage.setFullScreenExitHint("");
+        primaryStage.setFullScreen(true);
+        primaryStage.show();
     }
 
     @Override
     public void stop() throws Exception {
-        logger.log(Level.INFO, "Exiting");
+        logger.info("Exiting");
     }
 }

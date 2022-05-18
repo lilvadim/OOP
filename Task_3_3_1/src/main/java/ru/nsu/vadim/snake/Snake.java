@@ -1,49 +1,54 @@
 package ru.nsu.vadim.snake;
 
+import ru.nsu.vadim.snake.point.Point;
+import ru.nsu.vadim.snake.point.SnakePoint;
+
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Deque;
 
 public class Snake {
 
-    private final Deque<SnakePoint> points;
+    private final Deque<Point> points;
     private SpeedVector speedVector;
+    private final XYPair.Calculator<Point> calculator = new XYPair.Calculator<>(((x, y) -> new Point(x, y, SnakePoint.SNAKE_POINT)));
 
-    private Snake(Deque<SnakePoint> points, SpeedVector initialSpeed) {
+    private Snake(Deque<Point> points, SpeedVector initialSpeed) {
         this.points = points;
         this.speedVector = initialSpeed;
     }
 
-    static Snake createOnePointSnake(int x, int y, SpeedVector initialSpeed) {
-        Deque<SnakePoint> snakePoints = new ArrayDeque<>();
-        snakePoints.add(new SnakePoint(x, y));
+    public static Snake createOnePointSnake(int x, int y, SpeedVector initialSpeed) {
+        Deque<Point> snakePoints = new ArrayDeque<>();
+        snakePoints.add(new Point(x, y, SnakePoint.SNAKE_POINT));
         return new Snake(snakePoints, initialSpeed);
     }
 
-    public boolean move() {
-        SnakePoint head = new SnakePoint(
-                points.getFirst().getX() * speedVector.getX(),
-                points.getFirst().getY() * speedVector.getY());
+    public void move() {
+        incHead();
+        points.removeLast();
+    }
 
-        if (points.contains(head)) {
-            return false;
-        } else {
-            points.removeLast();
-            points.addFirst(head);
-            return true;
-        }
+    public void incHead() {
+        Point head = calculator.add(points.getFirst(),
+                calculator.multiplyCoords(
+                        calculator.unit(),
+                        speedVector
+                )
+        );
+
+        points.addFirst(head);
     }
 
     public void setSpeedVector(SpeedVector speedVector) {
         this.speedVector = speedVector;
     }
 
-    public Deque<SnakePoint> getPoints() {
+    public Collection<Point> getPoints() {
         return points;
     }
 
-    public static class SnakePoint extends Point {
-        private SnakePoint(int x, int y) {
-            super(x, y);
-        }
+    public SpeedVector getSpeedVector() {
+        return speedVector;
     }
 }
