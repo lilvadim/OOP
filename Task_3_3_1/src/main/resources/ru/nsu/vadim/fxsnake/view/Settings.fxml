@@ -6,34 +6,50 @@
       xmlns="http://javafx.com/javafx"
       fx:controller="ru.nsu.vadim.fxsnake.view.SettingsController"
       prefHeight="600.0" prefWidth="600.0" style="-fx-padding: 50;" spacing="20">
+    <VBox fx:id="inGameMenu" spacing="${root.spacing}" visible="false" managed="${inGameMenu.visible}">
+        <Label text="In Game Menu" style="-fx-font-size: 20;"/>
+        <Button text="Resume" onAction="#resume"/>
+        <Button text="Restart" onAction="#restart"/>
+        <Button text="Exit to Main Menu" onAction="#exitToMainMenu"/>
+    </VBox>
     <Label text="Settings" style="-fx-font-size: 20"/>
     <HBox spacing="10">
         <Label text="Width"/>
         <Label fx:id="widthVal" text="-"/>
-        <Slider fx:id="widthSlider"/>
     </HBox>
+    <Slider fx:id="widthSlider" value="25"/>
     <HBox spacing="10">
         <Label text="Height"/>
         <Label fx:id="heightVal" text="-"/>
-        <Slider fx:id="heightSlider"/>
     </HBox>
+    <Slider fx:id="heightSlider" value="25"/>
     <HBox spacing="10">
         <Label text="Scale"/>
-        <HBox>
-            <Label fx:id="scaleVal" text="-"/>
-            <Label text="\%"/>
-        </HBox>
-        <Slider fx:id="scaleSlider"/>
+        <Label fx:id="scaleVal" text="-"/>
+        <Label text="\%"/>
     </HBox>
+    <Slider fx:id="scaleSlider" value="1"/>
+    <HBox spacing="10">
+        <Label text="Foods"/>
+        <Label fx:id="foodsVal"/>
+    </HBox>
+    <Slider fx:id="foodsSlider" value="10"/>
     <fx:define>
         <ToggleGroup fx:id="scoresOpt"/>
     </fx:define>
-    <Label text="Scores"/>
-    <RadioButton toggleGroup="$scoresOpt" text="Reach the goal"/>
-    <RadioButton toggleGroup="$scoresOpt" text="Unlimited"/>
+    <HBox spacing="10">
+        <Label text="Scores"/>
+        <Label fx:id="scoreVal"/>
+    </HBox>
+    <Slider fx:id="scoreSlider" value="10"/>
+
+    <RadioButton fx:id="goalBtn" toggleGroup="$scoresOpt" text="Reach the goal"/>
+    <RadioButton fx:id="unlimitedBtn" toggleGroup="$scoresOpt" text="Unlimited"/>
     <VBox VBox.vgrow="ALWAYS"/>
     <HBox>
-        <Button text="Close" onAction="#closeWindow"/>
-        <Label fx:id="restartWarning"/>
+        <Button fx:id="closeBtn" text="Close" onAction="#closeWindow" visible="${!inGameMenu.visible}"
+                managed="${closeBtn.visible}"/>
+        <Label fx:id="restartWarning" text="Changes will be applied after restart"
+               visible="${inGameMenu.visible}"/>
     </HBox>
 </VBox>

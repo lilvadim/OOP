@@ -35,7 +35,7 @@ public class Field {
     }
 
     public void set(Point point) {
-        points.get(point.getX()).set(point.getY(), point);
+        points.get(point.x()).set(point.y(), point);
     }
 
     public Point generateFoodPoint() {
@@ -61,7 +61,7 @@ public class Field {
     }
 
     public boolean isEmpty(int x, int y) {
-        return get(x, y).getPointType() == EnvironmentPoint.EMPTY;
+        return get(x, y).pointType() == EnvironmentPoint.EMPTY;
     }
 
     public int getWidth() {

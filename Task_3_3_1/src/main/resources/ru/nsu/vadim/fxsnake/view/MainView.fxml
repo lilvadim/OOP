@@ -17,9 +17,10 @@
     </fx:define>
     <HBox alignment="CENTER">
         <VBox spacing="20" alignment="CENTER">
-            <Label text="Snake game" style="-fx-font-size: 20"/>
+            <Label text="The Snake Game" style="-fx-font-size: 20"/>
             <Button text="Start" onAction="#switchAndStartGame"/>
             <Button text="Settings" onAction="#openSettings"/>
+            <Button text="Exit" onAction="#exit"/>
         </VBox>
     </HBox>
 </VBox>

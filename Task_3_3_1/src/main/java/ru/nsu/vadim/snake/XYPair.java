@@ -2,12 +2,12 @@ package ru.nsu.vadim.snake;
 
 public interface XYPair {
     static boolean intersect(XYPair a, XYPair b) {
-        return a.getX() == b.getX() && a.getY() == b.getY();
+        return a.x() == b.x() && a.y() == b.y();
     }
 
-    int getX();
+    int x();
 
-    int getY();
+    int y();
 
     interface Factory<T extends XYPair> {
         T create(int x, int y);
@@ -25,11 +25,11 @@ public interface XYPair {
         }
 
         public T multiplyCoords(XYPair a, XYPair b) {
-            return factory.create(a.getX() * b.getX(), a.getY() * b.getY());
+            return factory.create(a.x() * b.x(), a.y() * b.y());
         }
 
         public T add(XYPair a, XYPair b) {
-            return factory.create(a.getX() + b.getX(), a.getY() + b.getY());
+            return factory.create(a.x() + b.x(), a.y() + b.y());
         }
     }
 }
