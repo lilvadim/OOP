@@ -1,7 +1,10 @@
 package ru.nsu.vadim.fxsnake.view;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -21,19 +24,29 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 public class GameScreenController extends AbstractController implements Initializable {
 
     private final Field field;
     private final Snake snake;
     private final GameLoopTimer gameLoopTimer;
+    private final IntegerProperty scoreProperty = new SimpleIntegerProperty(0);
+
+    @FXML
+    private Label scoreVal;
     @FXML
     private VBox root;
     @FXML
     private Pane container;
+
     @Inject
     private Provider<MainViewController> mainViewControllerProvider;
-    private Point currentFoodPoint = null;
+    @Inject
+    private Preferences preferences;
+    private Point currentFoodPoint;
+    private double scale;
+
 
     @Inject
     public GameScreenController(
@@ -43,30 +56,41 @@ public class GameScreenController extends AbstractController implements Initiali
         this.field = field;
         this.snake = snake;
         this.gameLoopTimer = gameLoopTimer;
+
+        currentFoodPoint = field.generateFoodPoint();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        initConfig();
+
+        scoreVal.textProperty().bind(scoreProperty.asString());
+
         container.prefHeightProperty().bind(container.widthProperty());
         container.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 newValue.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
             }
         });
-        gameLoopTimer.setFps(1);
-        gameLoopTimer.setTickHandler(secondsSinceLastFrame -> {
-            if (currentFoodPoint == null) {
-                currentFoodPoint = field.generateFoodPoint();
-            }
+        gameLoopTimer.setFps(3);
+        gameLoopTimer.setTickHandler(this::tick);
+        updateView();
+    }
+
+    private void initConfig() {
+        scale = preferences.getDouble("SCALE", 1);
+    }
+
+    private void tick(float secondsSinceLastFrame) {
+        if (snake.getPoints().stream()
+                .anyMatch(point -> XYPair.intersect(point, currentFoodPoint))) {
+            snake.incHead();
+            scoreProperty.set(scoreProperty.get() + 1);
+            field.clear(currentFoodPoint.getX(), currentFoodPoint.getY());
+            currentFoodPoint = field.generateFoodPoint();
+        } else {
             snake.move();
-            if (snake.getPoints().stream()
-                    .anyMatch(point -> XYPair.intersect(point, currentFoodPoint))) {
-                snake.incHead();
-                field.clear(currentFoodPoint.getX(), currentFoodPoint.getY());
-                currentFoodPoint = null;
-            }
-            updateView();
-        });
+        }
         updateView();
     }
 
@@ -119,7 +143,7 @@ public class GameScreenController extends AbstractController implements Initiali
                 if (point.getPointType() == EnvironmentPoint.EMPTY) {
                     rect.setStyle("-fx-fill: black;");
                 } else if (point.getPointType() == EnvironmentPoint.OBSTACLE) {
-                    rect.setStyle("-fx-fill: red;");
+                    rect.setStyle("-fx-fill: gray;");
                 } else if (point.getPointType() == FoodPointType.FOOD_POINT) {
                     rect.setStyle("-fx-fill: LimeGreen");
                 }
@@ -135,8 +159,8 @@ public class GameScreenController extends AbstractController implements Initiali
 
     private Rectangle createRectangle(Point point) {
         var rect = new Rectangle();
-        double screenWidthMost = Screen.getPrimary().getBounds().getWidth() * 0.9;
-        double screenHeightMost = Screen.getPrimary().getBounds().getHeight() * 0.9;
+        double screenWidthMost = Screen.getPrimary().getBounds().getWidth() * scale;
+        double screenHeightMost = Screen.getPrimary().getBounds().getHeight() * scale;
         double side = Math.min(screenHeightMost, screenWidthMost);
         rect.setWidth(side / field.getWidth());
         rect.setHeight(side / field.getHeight());
