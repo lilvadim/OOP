@@ -30,14 +30,17 @@ public class Snake {
     }
 
     public void incHead() {
-        Point head = calculator.add(points.getFirst(),
+        Point head = nextHead();
+        points.addFirst(head);
+    }
+
+    private Point nextHead() {
+        return calculator.add(points.getFirst(),
                 calculator.multiplyCoords(
                         calculator.unit(),
                         speedVector
                 )
         );
-
-        points.addFirst(head);
     }
 
     public void setSpeedVector(SpeedVector speedVector) {
