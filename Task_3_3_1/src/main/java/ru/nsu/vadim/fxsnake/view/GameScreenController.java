@@ -23,15 +23,17 @@ import ru.nsu.vadim.snake.point.Point;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.prefs.Preferences;
 
 public class GameScreenController extends AbstractController implements Initializable {
 
-    private final Field field;
-    private final Snake snake;
+    private final Provider<Field> fieldProvider;
+    private final Provider<Snake> snakeProvider;
     private final GameLoopTimer gameLoopTimer;
-    private final IntegerProperty scoreProperty = new SimpleIntegerProperty(0);
+    private final IntegerProperty score = new SimpleIntegerProperty(0);
 
     @FXML
     private Label scoreVal;
@@ -44,29 +46,27 @@ public class GameScreenController extends AbstractController implements Initiali
     private Provider<MainViewController> mainViewControllerProvider;
     @Inject
     private Preferences preferences;
-    private Point currentFoodPoint;
+    private final Set<Point> foods = new HashSet<>();
+    private Field field;
     private double scale;
+    private Snake snake;
+    private int scoreGoal;
+    private int food;
 
 
     @Inject
     public GameScreenController(
-            Field field,
-            Snake snake,
+            Provider<Field> fieldProvider,
+            Provider<Snake> snakeProvider,
             GameLoopTimer gameLoopTimer) {
-        this.field = field;
-        this.snake = snake;
+        this.fieldProvider = fieldProvider;
+        this.snakeProvider = snakeProvider;
         this.gameLoopTimer = gameLoopTimer;
-
-        currentFoodPoint = field.generateFoodPoint();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initConfig();
-
-        scoreVal.textProperty().bind(scoreProperty.asString());
-
-        container.prefHeightProperty().bind(container.widthProperty());
+        scoreVal.textProperty().bind(score.asString());
         container.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 newValue.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
@@ -74,24 +74,45 @@ public class GameScreenController extends AbstractController implements Initiali
         });
         gameLoopTimer.setFps(3);
         gameLoopTimer.setTickHandler(this::tick);
+    }
+
+    public void restart() {
+        foods.clear();
+        gameLoopTimer.start();
+        init();
         updateView();
     }
 
-    private void initConfig() {
+    private void init() {
         scale = preferences.getDouble("SCALE", 1);
+        scoreGoal = preferences.getInt("SCORE", Integer.MAX_VALUE);
+        food = preferences.getInt("FOODS", 5);
+        field = fieldProvider.get();
+        snake = snakeProvider.get();
+        generateFoodPoints();
     }
 
     private void tick(float secondsSinceLastFrame) {
-        if (snake.getPoints().stream()
-                .anyMatch(point -> XYPair.intersect(point, currentFoodPoint))) {
+        if (score.get() == scoreGoal || !snake.canMove()) {
+            score.set(0);
+            restart();
+        }
+        if (foods.stream().anyMatch(point -> XYPair.intersect(point, snake.head()))) {
+            score.set(score.get() + 1);
+            field.clear(snake.head().x(), snake.head().y());
+            foods.removeIf(point -> XYPair.intersect(point, snake.head()));
             snake.incHead();
-            scoreProperty.set(scoreProperty.get() + 1);
-            field.clear(currentFoodPoint.getX(), currentFoodPoint.getY());
-            currentFoodPoint = field.generateFoodPoint();
+            generateFoodPoints();
         } else {
             snake.move();
         }
         updateView();
+    }
+
+    private void generateFoodPoints() {
+        while (foods.size() < food) {
+            foods.add(field.generateFoodPoint());
+        }
     }
 
     public void handleKeyPress(KeyEvent event) {
@@ -140,11 +161,11 @@ public class GameScreenController extends AbstractController implements Initiali
             for (int y = 0; y < field.getHeight(); y++) {
                 var point = field.get(x, y);
                 var rect = createRectangle(point);
-                if (point.getPointType() == EnvironmentPoint.EMPTY) {
+                if (point.pointType() == EnvironmentPoint.EMPTY) {
                     rect.setStyle("-fx-fill: black;");
-                } else if (point.getPointType() == EnvironmentPoint.OBSTACLE) {
+                } else if (point.pointType() == EnvironmentPoint.OBSTACLE) {
                     rect.setStyle("-fx-fill: gray;");
-                } else if (point.getPointType() == FoodPointType.FOOD_POINT) {
+                } else if (point.pointType() == FoodPointType.FOOD_POINT) {
                     rect.setStyle("-fx-fill: LimeGreen");
                 }
                 container.getChildren().add(rect);
@@ -161,11 +182,12 @@ public class GameScreenController extends AbstractController implements Initiali
         var rect = new Rectangle();
         double screenWidthMost = Screen.getPrimary().getBounds().getWidth() * scale;
         double screenHeightMost = Screen.getPrimary().getBounds().getHeight() * scale;
-        double side = Math.min(screenHeightMost, screenWidthMost);
-        rect.setWidth(side / field.getWidth());
-        rect.setHeight(side / field.getHeight());
-        rect.setX((side / field.getWidth()) * point.getX());
-        rect.setY((side / field.getHeight()) * point.getY());
+        double maxSide = Math.min(screenHeightMost, screenWidthMost);
+        double divide = Math.max(field.getHeight(), field.getWidth());
+        rect.setWidth(maxSide / divide);
+        rect.setHeight(maxSide / divide);
+        rect.setX((maxSide / divide) * point.x());
+        rect.setY((maxSide / divide) * point.y());
         return rect;
     }
 
@@ -179,6 +201,10 @@ public class GameScreenController extends AbstractController implements Initiali
     }
 
     public void start() {
-        gameLoopTimer.start();
+        restart();
+    }
+
+    public void stop() {
+        gameLoopTimer.stop();
     }
 }

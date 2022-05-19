@@ -14,11 +14,11 @@ public enum SpeedVector implements XYPair {
         this.y = y;
     }
 
-    public int getX() {
+    public int x() {
         return x;
     }
 
-    public int getY() {
+    public int y() {
         return y;
     }
 }

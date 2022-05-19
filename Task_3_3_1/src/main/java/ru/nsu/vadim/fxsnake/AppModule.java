@@ -31,13 +31,14 @@ public class AppModule extends AbstractModule {
     }
 
     @Provides
-    Field field() {
-        return new Field(25, 25);
+    Field field(Preferences preferences) {
+        return new Field(
+                preferences.getInt("WIDTH", 25), preferences.getInt("HEIGHT", 25));
     }
 
     @Provides
-    Snake snake() {
-        return Snake.createOnePointSnake(1, 1, SpeedVector.RIGHT);
+    Snake snake(Field field) {
+        return Snake.createOnePointSnake(0, 0, SpeedVector.RIGHT, field.getWidth(), field.getHeight());
     }
 
     @Provides
