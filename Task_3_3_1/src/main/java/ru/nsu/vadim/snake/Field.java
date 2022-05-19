@@ -1,8 +1,9 @@
 package ru.nsu.vadim.snake;
 
 import ru.nsu.vadim.snake.point.EnvironmentPoint;
-import ru.nsu.vadim.snake.point.FoodPointType;
+import ru.nsu.vadim.snake.point.FoodPoint;
 import ru.nsu.vadim.snake.point.Point;
+import ru.nsu.vadim.snake.point.PointType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,21 @@ public class Field {
     }
 
     public Point generateFoodPoint() {
+        Point point = randomPoint(FoodPoint.FOOD_POINT);
+        set(point);
+        return point;
+    }
+
+    private Point randomPoint(PointType pointType) {
         Random random = new Random();
-        Point point = new Point(
+        return new Point(
                 random.nextInt(WIDTH),
                 random.nextInt(HEIGHT),
-                FoodPointType.FOOD_POINT);
+                pointType);
+    }
+
+    public Point generateObstaclePoint() {
+        Point point = randomPoint(EnvironmentPoint.OBSTACLE);
         set(point);
         return point;
     }
