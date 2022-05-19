@@ -17,15 +17,14 @@ import ru.nsu.vadim.snake.Snake;
 import ru.nsu.vadim.snake.SpeedVector;
 import ru.nsu.vadim.snake.XYPair;
 import ru.nsu.vadim.snake.point.EnvironmentPoint;
-import ru.nsu.vadim.snake.point.FoodPointType;
+import ru.nsu.vadim.snake.point.FoodPoint;
 import ru.nsu.vadim.snake.point.Point;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 public class GameScreenController extends AbstractController implements Initializable {
@@ -46,7 +45,10 @@ public class GameScreenController extends AbstractController implements Initiali
     private Provider<MainViewController> mainViewControllerProvider;
     @Inject
     private Preferences preferences;
+    private final List<Point> obstacles = new ArrayList<>();
     private final Set<Point> foods = new HashSet<>();
+    @Inject
+    private Logger logger;
     private Field field;
     private double scale;
     private Snake snake;
@@ -78,6 +80,7 @@ public class GameScreenController extends AbstractController implements Initiali
 
     public void restart() {
         foods.clear();
+        obstacles.clear();
         gameLoopTimer.start();
         init();
         updateView();
@@ -90,10 +93,13 @@ public class GameScreenController extends AbstractController implements Initiali
         field = fieldProvider.get();
         snake = snakeProvider.get();
         generateFoodPoints();
+        generateObstacles();
     }
 
     private void tick(float secondsSinceLastFrame) {
-        if (score.get() == scoreGoal || !snake.canMove()) {
+        if (score.get() == scoreGoal
+                || !snake.canMove()
+                || obstacles.stream().anyMatch(point -> XYPair.intersect(point, snake.head()))) {
             score.set(0);
             restart();
         }
@@ -112,6 +118,18 @@ public class GameScreenController extends AbstractController implements Initiali
     private void generateFoodPoints() {
         while (foods.size() < food) {
             foods.add(field.generateFoodPoint());
+        }
+    }
+
+    private void generateObstacles() {
+        for (int i = 0; i < Math.min(field.getHeight(), field.getWidth()); i++) {
+            Point obstacle = field.generateObstaclePoint();
+            if (obstacle.x() > 0 && obstacle.y() > 0
+                    && foods.stream().noneMatch(point -> XYPair.intersect(point, obstacle))) {
+                obstacles.add(obstacle);
+            } else {
+                i--;
+            }
         }
     }
 
@@ -165,7 +183,7 @@ public class GameScreenController extends AbstractController implements Initiali
                     rect.setStyle("-fx-fill: black;");
                 } else if (point.pointType() == EnvironmentPoint.OBSTACLE) {
                     rect.setStyle("-fx-fill: gray;");
-                } else if (point.pointType() == FoodPointType.FOOD_POINT) {
+                } else if (point.pointType() == FoodPoint.FOOD_POINT) {
                     rect.setStyle("-fx-fill: LimeGreen");
                 }
                 container.getChildren().add(rect);

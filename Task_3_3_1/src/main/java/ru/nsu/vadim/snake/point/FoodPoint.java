@@ -1,12 +1,12 @@
 package ru.nsu.vadim.snake.point;
 
-public enum FoodPointType implements ScorePointType {
+public enum FoodPoint implements ScorePointType {
 
     FOOD_POINT(1);
 
     private final int score;
 
-    FoodPointType(int score) {
+    FoodPoint(int score) {
         this.score = score;
     }
 
