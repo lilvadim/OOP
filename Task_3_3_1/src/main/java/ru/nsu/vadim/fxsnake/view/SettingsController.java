@@ -70,21 +70,21 @@ public class SettingsController extends AbstractController implements Initializa
 
     @Override
     protected Stage getStage() {
-        return (Stage) root.getScene().getWindow();
+        return root.getScene() == null ? null : (Stage) root.getScene().getWindow();
     }
 
     public void openWindow() {
-        Stage stage = new Stage(StageStyle.UNDECORATED);
-        stage.initOwner(Stage.getWindows().get(0));
+        Stage stage = getStage() == null ? new Stage(StageStyle.UNDECORATED) : getStage();
+        if (stage.getOwner() == null) {
+            stage.initOwner(Stage.getWindows().get(0));
+        }
         stage.setScene(
                 getRoot().getScene() == null ? new Scene(getRoot()) : getRoot().getScene());
         stage.show();
     }
 
     public void closeWindow() {
-        if (getStage() != null) {
-            getStage().close();
-        }
+        getStage().hide();
     }
 
     @Override
@@ -150,8 +150,7 @@ public class SettingsController extends AbstractController implements Initializa
             if (newValue != null) {
                 newValue.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if (event.getCode() == KeyCode.ESCAPE) {
-                        closeWindow();
-                        mainViewControllerProvider.get().resumeGame();
+                        resume();
                     }
                 });
             }
