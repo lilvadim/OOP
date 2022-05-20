@@ -2,6 +2,7 @@ package ru.nsu.vadim.snake;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import ru.nsu.vadim.snake.point.EnvironmentPoint;
 import ru.nsu.vadim.snake.point.Point;
 
 public class FieldTest {
@@ -19,5 +20,15 @@ public class FieldTest {
         Point obstacle = field.generateObstaclePoint();
 
         Assertions.assertEquals(obstacle, field.get(obstacle.x(), obstacle.y()));
+    }
+
+    @Test
+    void clear() {
+        Field field = new Field(50, 50);
+        Point obstacle = field.generateObstaclePoint();
+
+        field.clear(obstacle.x(), obstacle.y());
+
+        Assertions.assertEquals(EnvironmentPoint.EMPTY, field.get(obstacle.x(), obstacle.y()).pointType());
     }
 }
