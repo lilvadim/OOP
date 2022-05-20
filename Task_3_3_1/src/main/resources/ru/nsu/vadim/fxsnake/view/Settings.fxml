@@ -18,12 +18,12 @@
         <Label text="Width"/>
         <Label fx:id="widthVal" text="-"/>
     </HBox>
-    <Slider fx:id="widthSlider" value="25"/>
+    <Slider fx:id="widthSlider" value="25" min="2"/>
     <HBox spacing="10">
         <Label text="Height"/>
         <Label fx:id="heightVal" text="-"/>
     </HBox>
-    <Slider fx:id="heightSlider" value="25"/>
+    <Slider fx:id="heightSlider" value="25" min="2"/>
     <HBox spacing="10">
         <Label text="Scale"/>
         <Label fx:id="scaleVal" text="-"/>
@@ -42,7 +42,7 @@
         <Label text="Scores"/>
         <Label fx:id="scoreVal"/>
     </HBox>
-    <Slider fx:id="scoreSlider" value="10"/>
+    <Slider fx:id="scoreSlider" value="10" min="1"/>
 
     <RadioButton fx:id="goalBtn" toggleGroup="$scoresOpt" text="Reach the goal"/>
     <RadioButton fx:id="unlimitedBtn" toggleGroup="$scoresOpt" text="Unlimited"/>
