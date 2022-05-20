@@ -6,7 +6,8 @@
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
       xmlns="http://javafx.com/javafx"
-      fx:controller="ru.nsu.vadim.fxsnake.view.GameScreenController">
+      fx:controller="ru.nsu.vadim.fxsnake.view.GameScreenController"
+      stylesheets="@common.css">
     <HBox spacing="10" alignment="CENTER_RIGHT" maxWidth="Infinity" style="-fx-padding: 10; -fx-font-size: 20;">
         <Label text="Score:"/>
         <Label fx:id="scoreVal" text="0"/>

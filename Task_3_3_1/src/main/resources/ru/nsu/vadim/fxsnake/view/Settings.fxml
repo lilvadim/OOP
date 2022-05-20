@@ -5,7 +5,8 @@
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
       xmlns="http://javafx.com/javafx"
       fx:controller="ru.nsu.vadim.fxsnake.view.SettingsController"
-      prefHeight="600.0" prefWidth="600.0" style="-fx-padding: 50;" spacing="20">
+      prefHeight="600.0" prefWidth="600.0" style="-fx-padding: 50;" spacing="20"
+      stylesheets="@common.css">
     <VBox fx:id="inGameMenu" spacing="${root.spacing}" visible="false" managed="${inGameMenu.visible}">
         <Label text="In Game Menu" style="-fx-font-size: 20;"/>
         <Button text="Resume" onAction="#resume"/>
