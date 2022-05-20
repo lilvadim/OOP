@@ -78,9 +78,6 @@ public class GameScreenController extends AbstractController implements Initiali
      * Restart game
      */
     public void restart() {
-        foods.clear();
-        obstacles.clear();
-        gameLoopTimer.start();
         init();
         updateView();
     }
@@ -89,22 +86,26 @@ public class GameScreenController extends AbstractController implements Initiali
      * Initialize all values
      */
     private void init() {
+        score.set(0);
+        foods.clear();
+        obstacles.clear();
         container.getChildren().clear();
         scale = preferences.getDouble("SCALE", 1);
         scoreGoal = preferences.getInt("SCORE", Integer.MAX_VALUE);
         food = preferences.getInt("FOODS", 5);
         field = fieldProvider.get();
         snake = snakeProvider.get();
-        generateFoodPoints();
         generateObstacles();
+        generateFoodPoints();
+        gameLoopTimer.start();
     }
 
     private void tick(float secondsSinceLastFrame) {
-        if (score.get() == scoreGoal
+        if (score.get() >= scoreGoal
                 || !snake.canMove()
                 || obstacles.stream().anyMatch(point -> XYPair.intersect(point, snake.head()))) {
-            score.set(0);
             restart();
+            return;
         }
         if (foods.stream().anyMatch(point -> XYPair.intersect(point, snake.head()))) {
             score.set(score.get() + 1);
@@ -120,17 +121,23 @@ public class GameScreenController extends AbstractController implements Initiali
 
     private void generateFoodPoints() {
         while (foods.size() < food) {
-            foods.add(field.generateFoodPoint());
+            Point foodPoint = field.generateFoodPoint();
+            if (obstacles.stream().noneMatch(point -> XYPair.intersect(point, foodPoint))
+                    && snake.getPoints().stream().noneMatch(point -> XYPair.intersect(point, foodPoint))) {
+                foods.add(foodPoint);
+            } else {
+                field.clear(foodPoint.x(), foodPoint.y());
+            }
         }
     }
 
     private void generateObstacles() {
         for (int i = 0; i < Math.min(field.getHeight(), field.getWidth()); i++) {
             Point obstacle = field.generateObstaclePoint();
-            if (obstacle.x() > 0 && obstacle.y() > 0
-                    && foods.stream().noneMatch(point -> XYPair.intersect(point, obstacle))) {
+            if (obstacle.x() > 0 && obstacle.y() > 0) {
                 obstacles.add(obstacle);
             } else {
+                field.clear(obstacle.x(), obstacle.y());
                 i--;
             }
         }
@@ -216,8 +223,8 @@ public class GameScreenController extends AbstractController implements Initiali
      */
     private Rectangle createRectangle(Point point) {
         var rect = new Rectangle();
-        double screenWidthMost = Stage.getWindows().get(0).getWidth() * scale;
-        double screenHeightMost = Stage.getWindows().get(0).getHeight() * scale;
+        double screenWidthMost = getStage().orElseThrow().getWidth() * scale;
+        double screenHeightMost = getStage().orElseThrow().getHeight() * scale;
         double maxSide = Math.min(screenHeightMost, screenWidthMost);
         double divide = Math.max(field.getHeight(), field.getWidth());
         rect.setWidth(maxSide / divide);
