@@ -3,10 +3,7 @@ package ru.nsu.vadim.fxsnake.view;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Slider;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
@@ -16,6 +13,7 @@ import javafx.stage.StageStyle;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -85,7 +83,33 @@ public class SettingsController extends AbstractController implements Initializa
     }
 
     public void closeWindow() {
-        getStage().orElseThrow().hide();
+        if (!validateValues()) {
+            showAlert();
+        } else {
+            getStage().orElseThrow().hide();
+        }
+    }
+
+    private void showAlert() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.initOwner(getStage().orElseThrow());
+        alert.setTitle("Invalid values");
+        alert.setContentText("""
+                Width >= 2
+                Height >= 2
+                Scale > 0
+                Scores > 0""");
+        alert.getDialogPane().getStylesheets().add(
+                Objects.requireNonNull(SettingsController.class.getResource("common.css"))
+                        .toExternalForm());
+        alert.show();
+    }
+
+    private boolean validateValues() {
+        return widthSlider.getValue() >= 2
+                && heightSlider.getValue() >= 2
+                && scaleSlider.getValue() > 0
+                && scoreSlider.getValue() > 0;
     }
 
     @Override
