@@ -215,8 +215,16 @@ public class GameScreenController extends AbstractController implements Initiali
                 } else if (point.pointType() == EnvironmentPoint.OBSTACLE) {
                     rect.setStyle("-fx-fill: gray;");
                 } else if (point.pointType() == FoodPoint.FOOD_POINT) {
-                    rect.setStyle("-fx-fill: LimeGreen");
+                    double arc = rect.getWidth();
+                    rect.setStyle("-fx-fill: LimeGreen;"
+                            + "-fx-arc-width: " + arc + ";"
+                            + "-fx-arc-height: " + arc + ";");
                 }
+
+                var bgRect = createRectangle(point);
+                bgRect.setStyle("-fx-fill: black");
+                container.getChildren().add(bgRect);
+
                 container.getChildren().add(rect);
             }
         }
