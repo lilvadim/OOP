@@ -90,6 +90,38 @@ public class SettingsController extends AbstractController implements Initializa
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        bindProperties();
+        initValues();
+        addEscapeKeyHandler();
+    }
+
+    private void addEscapeKeyHandler() {
+        getRoot().sceneProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                newValue.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        resume();
+                    }
+                });
+            }
+        });
+    }
+
+    private void initValues() {
+        widthSlider.setValue(preferences.getInt("WIDTH", 25));
+        heightSlider.setValue(preferences.getInt("HEIGHT", 25));
+        scaleSlider.setValue(preferences.getDouble("SCALE", 1) * 100);
+        scoreSlider.setValue(preferences.getInt("SCORE", 10));
+        foodsSlider.setValue(preferences.getInt("FOODS", 10));
+
+        if (preferences.getInt("SCORE", Integer.MAX_VALUE) == Integer.MAX_VALUE) {
+            unlimitedBtn.setSelected(true);
+        } else {
+            goalBtn.setSelected(true);
+        }
+    }
+
+    private void bindProperties() {
         inGameMenu.visibleProperty().bind(mainViewControllerProvider.get().gameRunningProperty());
 
         widthVal.setText(String.valueOf(widthSlider.getValue()));
@@ -133,28 +165,6 @@ public class SettingsController extends AbstractController implements Initializa
             foodsSlider.setValue(newValue.intValue());
             foodsVal.setText(String.valueOf(newValue.intValue()));
             preferences.putInt("FOODS", newValue.intValue());
-        });
-
-        widthSlider.setValue(preferences.getInt("WIDTH", 25));
-        heightSlider.setValue(preferences.getInt("HEIGHT", 25));
-        scaleSlider.setValue(preferences.getDouble("SCALE", 1) * 100);
-        scoreSlider.setValue(preferences.getInt("SCORE", 10));
-        foodsSlider.setValue(preferences.getInt("FOODS", 10));
-
-        if (preferences.getInt("SCORE", Integer.MAX_VALUE) == Integer.MAX_VALUE) {
-            unlimitedBtn.setSelected(true);
-        } else {
-            goalBtn.setSelected(true);
-        }
-
-        getRoot().sceneProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                newValue.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-                    if (event.getCode() == KeyCode.ESCAPE) {
-                        resume();
-                    }
-                });
-            }
         });
     }
 

@@ -64,14 +64,26 @@ public class GameScreenController extends AbstractController implements Initiali
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        bindProperties();
+        addKeyHandler();
+        setupGameLoopTimer();
+    }
+
+    private void setupGameLoopTimer() {
+        gameLoopTimer.setFps(3);
+        gameLoopTimer.setTickHandler(this::tick);
+    }
+
+    private void bindProperties() {
         scoreVal.textProperty().bind(score.asString());
+    }
+
+    private void addKeyHandler() {
         container.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 newValue.addEventHandler(KeyEvent.KEY_PRESSED, this::handleKeyPress);
             }
         });
-        gameLoopTimer.setFps(3);
-        gameLoopTimer.setTickHandler(this::tick);
     }
 
     /**
