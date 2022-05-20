@@ -22,6 +22,16 @@ public class Snake {
         this.limitY = limitY;
     }
 
+    /**
+     * Factory method to create one point snake initially located in (x, y)
+     *
+     * @param x            x
+     * @param y            y
+     * @param initialSpeed initial direction
+     * @param limitX       max x
+     * @param limitY       max y
+     * @return created snake
+     */
     public static Snake createOnePointSnake(
             int x,
             int y,
@@ -34,11 +44,17 @@ public class Snake {
         return new Snake(snakePoints, initialSpeed, limitX, limitY);
     }
 
+    /**
+     * Move in direction of speed vector
+     */
     public void move() {
         incHead();
         points.removeLast();
     }
 
+    /**
+     * Add point to head, without removing one from tail
+     */
     public void incHead() {
         Point head = nextHead();
         points.addFirst(head);
@@ -56,22 +72,39 @@ public class Snake {
         return new Point(x, y, SnakePoint.SNAKE_POINT);
     }
 
-    public void setSpeedVector(SpeedVector speedVector) {
-        this.speedVector = speedVector;
-    }
-
+    /**
+     * Get points of snake
+     */
     public Collection<Point> getPoints() {
         return points;
     }
 
+    /**
+     * Direction of snake
+     */
     public SpeedVector getSpeedVector() {
         return speedVector;
     }
 
+    /**
+     * Change direction of snake
+     *
+     * @param speedVector direction
+     */
+    public void setSpeedVector(SpeedVector speedVector) {
+        this.speedVector = speedVector;
+    }
+
+    /**
+     * Head of snake
+     */
     public Point head() {
         return points.getFirst();
     }
 
+    /**
+     * Checks if snake head will intersect body on next step
+     */
     public boolean canMove() {
         var nextHead = nextHead();
         return points.stream().noneMatch(point -> XYPair.intersect(point, nextHead));

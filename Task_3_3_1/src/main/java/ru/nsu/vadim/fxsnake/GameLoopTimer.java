@@ -4,6 +4,9 @@ import javafx.animation.AnimationTimer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
+/**
+ * Game loop based on JavaFX AnimationTimer
+ */
 public class GameLoopTimer extends AnimationTimer {
 
     private final DoubleProperty animationDuration = new SimpleDoubleProperty(0);
@@ -23,18 +26,25 @@ public class GameLoopTimer extends AnimationTimer {
     private int counter = 0;
     private int skip;
 
+    /**
+     * @return true if paused
+     */
     public boolean isPaused() {
         return isPaused;
     }
 
+    /**
+     * @return true if active
+     */
     public boolean isActive() {
         return isActive;
     }
 
-    public DoubleProperty animationDurationProperty() {
-        return animationDuration;
-    }
-
+    /**
+     * Set fps to be handled
+     *
+     * @param fps from 1 to 60
+     */
     public void setFps(int fps) {
         if (fps > 60 || fps < 1) {
             throw new IllegalArgumentException();
@@ -42,18 +52,27 @@ public class GameLoopTimer extends AnimationTimer {
         this.skip = 60 / fps;
     }
 
+    /**
+     * Pause tick
+     */
     public void pause() {
         if (!isPaused) {
             pauseScheduled = true;
         }
     }
 
+    /**
+     * Resume tick
+     */
     public void resume() {
         if (isPaused) {
             playScheduled = true;
         }
     }
 
+    /**
+     * Start tick
+     */
     @Override
     public void start() {
         super.start();
@@ -61,6 +80,9 @@ public class GameLoopTimer extends AnimationTimer {
         restartScheduled = true;
     }
 
+    /**
+     * Stop tick
+     */
     @Override
     public void stop() {
         super.stop();
@@ -107,10 +129,16 @@ public class GameLoopTimer extends AnimationTimer {
         }
     }
 
+    /**
+     * Sets tick handles which called on every tick
+     */
     public void setTickHandler(TickHandler tickHandler) {
         this.tickHandler = tickHandler;
     }
 
+    /**
+     * Tick handler functional interface
+     */
     @FunctionalInterface
     public interface TickHandler {
         void tick(float secondsSinceLastFrame);

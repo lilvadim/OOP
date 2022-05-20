@@ -2,6 +2,11 @@ package ru.nsu.vadim.fxsnake.view;
 
 import javafx.stage.Stage;
 
+import java.util.Optional;
+
 public abstract class AbstractController {
-    protected abstract Stage getStage();
+    /**
+     * Returns current window
+     */
+    protected abstract Optional<Stage> getStage();
 }

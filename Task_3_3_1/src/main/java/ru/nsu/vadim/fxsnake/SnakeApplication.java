@@ -13,6 +13,9 @@ import javax.inject.Named;
 import javax.inject.Provider;
 import java.util.logging.Logger;
 
+/**
+ * Application
+ */
 public class SnakeApplication extends Application {
 
     private final Injector injector = Guice.createInjector(new AppModule());

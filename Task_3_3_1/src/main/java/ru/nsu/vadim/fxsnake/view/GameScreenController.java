@@ -9,7 +9,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import ru.nsu.vadim.fxsnake.GameLoopTimer;
 import ru.nsu.vadim.snake.Field;
@@ -24,7 +23,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
 import java.util.*;
-import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 public class GameScreenController extends AbstractController implements Initializable {
@@ -47,8 +45,6 @@ public class GameScreenController extends AbstractController implements Initiali
     private Preferences preferences;
     private final List<Point> obstacles = new ArrayList<>();
     private final Set<Point> foods = new HashSet<>();
-    @Inject
-    private Logger logger;
     private Field field;
     private double scale;
     private Snake snake;
@@ -78,6 +74,9 @@ public class GameScreenController extends AbstractController implements Initiali
         gameLoopTimer.setTickHandler(this::tick);
     }
 
+    /**
+     * Restart game
+     */
     public void restart() {
         foods.clear();
         obstacles.clear();
@@ -86,7 +85,11 @@ public class GameScreenController extends AbstractController implements Initiali
         updateView();
     }
 
+    /**
+     * Initialize all values
+     */
     private void init() {
+        container.getChildren().clear();
         scale = preferences.getDouble("SCALE", 1);
         scoreGoal = preferences.getInt("SCORE", Integer.MAX_VALUE);
         food = preferences.getInt("FOODS", 5);
@@ -133,7 +136,7 @@ public class GameScreenController extends AbstractController implements Initiali
         }
     }
 
-    public void handleKeyPress(KeyEvent event) {
+    private void handleKeyPress(KeyEvent event) {
         switch (event.getCode()) {
             case RIGHT -> {
                 if (snake.getSpeedVector() != SpeedVector.LEFT) {
@@ -166,14 +169,23 @@ public class GameScreenController extends AbstractController implements Initiali
         }
     }
 
+    /**
+     * Pause the game
+     */
     public void pause() {
         gameLoopTimer.pause();
     }
 
+    /**
+     * Resume the game
+     */
     public void resume() {
         gameLoopTimer.resume();
     }
 
+    /**
+     * Update the game screen
+     */
     private void updateView() {
         for (int x = 0; x < field.getWidth(); x++) {
             for (int y = 0; y < field.getHeight(); y++) {
@@ -196,10 +208,16 @@ public class GameScreenController extends AbstractController implements Initiali
         }
     }
 
+    /**
+     * Creates rectangle with size and coordinates relatively to window size
+     *
+     * @param point point with coordinates
+     * @return new rectangle
+     */
     private Rectangle createRectangle(Point point) {
         var rect = new Rectangle();
-        double screenWidthMost = Screen.getPrimary().getBounds().getWidth() * scale;
-        double screenHeightMost = Screen.getPrimary().getBounds().getHeight() * scale;
+        double screenWidthMost = Stage.getWindows().get(0).getWidth() * scale;
+        double screenHeightMost = Stage.getWindows().get(0).getHeight() * scale;
         double maxSide = Math.min(screenHeightMost, screenWidthMost);
         double divide = Math.max(field.getHeight(), field.getWidth());
         rect.setWidth(maxSide / divide);
@@ -210,18 +228,29 @@ public class GameScreenController extends AbstractController implements Initiali
     }
 
     @Override
-    protected Stage getStage() {
-        return (Stage) container.getScene().getWindow();
+    protected Optional<Stage> getStage() {
+        return Optional.ofNullable((Stage) container.getScene().getWindow());
     }
 
+    /**
+     * Root pane
+     *
+     * @return root
+     */
     public Pane getRoot() {
         return root;
     }
 
+    /**
+     * Start game, equivalent to {@code restart()} call
+     */
     public void start() {
         restart();
     }
 
+    /**
+     * Stops game
+     */
     public void stop() {
         gameLoopTimer.stop();
     }

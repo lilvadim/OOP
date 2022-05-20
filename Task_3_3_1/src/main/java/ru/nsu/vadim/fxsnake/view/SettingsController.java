@@ -16,6 +16,7 @@ import javafx.stage.StageStyle;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -55,8 +56,6 @@ public class SettingsController extends AbstractController implements Initializa
     @FXML
     private Slider scaleSlider;
     @FXML
-    private Label restartWarning;
-    @FXML
     private VBox root;
 
     @Inject
@@ -69,14 +68,16 @@ public class SettingsController extends AbstractController implements Initializa
     }
 
     @Override
-    protected Stage getStage() {
-        return root.getScene() == null ? null : (Stage) root.getScene().getWindow();
+    protected Optional<Stage> getStage() {
+        return root.getScene() == null ? Optional.empty() : Optional.ofNullable((Stage) root.getScene().getWindow());
     }
 
     public void openWindow() {
-        Stage stage = getStage() == null ? new Stage(StageStyle.UNDECORATED) : getStage();
+        Stage stage = getStage()
+                .orElseGet(() -> new Stage(StageStyle.UNDECORATED));
+        Stage primary = (Stage) Stage.getWindows().get(0);
         if (stage.getOwner() == null) {
-            stage.initOwner(Stage.getWindows().get(0));
+            stage.initOwner(primary);
         }
         stage.setScene(
                 getRoot().getScene() == null ? new Scene(getRoot()) : getRoot().getScene());
@@ -84,7 +85,7 @@ public class SettingsController extends AbstractController implements Initializa
     }
 
     public void closeWindow() {
-        getStage().hide();
+        getStage().orElseThrow().hide();
     }
 
     @Override
