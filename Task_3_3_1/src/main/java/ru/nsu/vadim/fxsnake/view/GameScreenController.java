@@ -78,14 +78,15 @@ public class GameScreenController extends AbstractController implements Initiali
      * Restart game
      */
     public void restart() {
-        init();
+        initValues();
         updateView();
+        gameLoopTimer.start();
     }
 
     /**
      * Initialize all values
      */
-    private void init() {
+    private void initValues() {
         score.set(0);
         foods.clear();
         obstacles.clear();
@@ -97,7 +98,6 @@ public class GameScreenController extends AbstractController implements Initiali
         snake = snakeProvider.get();
         generateObstacles();
         generateFoodPoints();
-        gameLoopTimer.start();
     }
 
     private void tick(float secondsSinceLastFrame) {
