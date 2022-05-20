@@ -3,8 +3,6 @@ package ru.nsu.vadim.fxsnake;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import ru.nsu.vadim.fxsnake.view.MainViewController;
 import ru.nsu.vadim.snake.Field;
@@ -15,6 +13,9 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.prefs.Preferences;
 
+/**
+ * Dependencies to be injected
+ */
 public class AppModule extends AbstractModule {
     @Override
     protected void configure() {
@@ -42,11 +43,7 @@ public class AppModule extends AbstractModule {
     }
 
     @Provides
-    ObjectProperty<SpeedVector> speedVectorObjectProperty(Snake snake) {
-        return new SimpleObjectProperty<>(snake.getSpeedVector());
-    }
-
-    @Provides
+    @Singleton
     Preferences properties() {
         return Preferences.userNodeForPackage(SnakeApplication.class);
     }

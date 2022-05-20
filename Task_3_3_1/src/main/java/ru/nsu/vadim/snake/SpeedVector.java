@@ -1,5 +1,8 @@
 package ru.nsu.vadim.snake;
 
+/**
+ * Used to set direction
+ */
 public enum SpeedVector implements XYPair {
 
     UP(0, -1),
@@ -14,10 +17,12 @@ public enum SpeedVector implements XYPair {
         this.y = y;
     }
 
+    @Override
     public int x() {
         return x;
     }
 
+    @Override
     public int y() {
         return y;
     }

@@ -1,5 +1,8 @@
 package ru.nsu.vadim.snake.point;
 
+/**
+ * Food point types
+ */
 public enum FoodPoint implements ScorePointType {
 
     FOOD_POINT(1);
