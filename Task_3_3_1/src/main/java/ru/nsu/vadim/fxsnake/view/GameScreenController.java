@@ -243,14 +243,15 @@ public class GameScreenController extends AbstractController implements Initiali
      */
     private Rectangle createRectangle(Point point) {
         var rect = new Rectangle();
-        double screenWidthMost = getStage().orElseThrow().getWidth() * scale;
-        double screenHeightMost = getStage().orElseThrow().getHeight() * scale;
-        double maxSide = Math.min(screenHeightMost, screenWidthMost);
-        double divide = Math.max(field.getHeight(), field.getWidth());
-        rect.setWidth(maxSide / divide);
-        rect.setHeight(maxSide / divide);
-        rect.setX((maxSide / divide) * point.x());
-        rect.setY((maxSide / divide) * point.y());
+        var stage = getStage().orElseGet(() -> (Stage) Stage.getWindows().get(0));
+
+        double side = Math.min(scale, 0.9) * (stage.getHeight() <= stage.getWidth() ?
+                stage.getHeight() / field.getHeight()
+                : stage.getWidth() / field.getWidth());
+        rect.setWidth(side);
+        rect.setHeight(side);
+        rect.setX(side * point.x());
+        rect.setY(side * point.y());
         return rect;
     }
 
