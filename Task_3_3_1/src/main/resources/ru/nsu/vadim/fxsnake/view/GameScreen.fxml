@@ -7,12 +7,18 @@
 <VBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
       xmlns="http://javafx.com/javafx"
       fx:controller="ru.nsu.vadim.fxsnake.view.GameScreenController"
-      stylesheets="@common.css">
+      stylesheets="@common.css"
+      minWidth="100"
+      minHeight="100"
+      maxWidth="Infinity"
+      maxHeight="Infinity"
+      style="-fx-background-color: white;">
     <HBox spacing="10" alignment="CENTER_RIGHT" maxWidth="Infinity" style="-fx-padding: 10; -fx-font-size: 20;">
         <Label text="Score:"/>
         <Label fx:id="scoreVal" text="0"/>
     </HBox>
     <Pane fx:id="container"
-          prefHeight="400.0" prefWidth="600.0" maxWidth="Infinity" maxHeight="Infinity">
+          maxWidth="Infinity" maxHeight="Infinity"
+          VBox.vgrow="ALWAYS">
     </Pane>
 </VBox>

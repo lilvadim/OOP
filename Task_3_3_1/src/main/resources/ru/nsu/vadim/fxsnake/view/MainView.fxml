@@ -2,26 +2,45 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml" fx:id="root"
-      xmlns="http://javafx.com/javafx"
-      fx:controller="ru.nsu.vadim.fxsnake.view.MainViewController"
-      prefHeight="400.0" prefWidth="600.0" maxHeight="Infinity" maxWidth="Infinity"
-      alignment="CENTER"
-      stylesheets="@common.css">
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.Scene?>
+<?import javafx.stage.Stage?>
+<Stage xmlns:fx="http://javafx.com/fxml"
+       xmlns="http://javafx.com/javafx"
+       fx:controller="ru.nsu.vadim.fxsnake.view.MainViewController"
+       fullScreen="true"
+       fullScreenExitHint=""
+       fullScreenExitKeyCombination="no_match">
     <fx:define>
-        <fx:include fx:id="gameScreen" source="GameScreen.fxml"/>
+        <Stage fx:id="settingsWindow">
+            <scene>
+                <Scene>
+                    <fx:include fx:id="settings" source="Settings.fxml"/>
+                </Scene>
+            </scene>
+        </Stage>
     </fx:define>
-    <fx:define>
-        <fx:include fx:id="settings" source="Settings.fxml"/>
-    </fx:define>
-    <HBox alignment="CENTER">
-        <VBox spacing="20" alignment="CENTER">
-            <Label text="The Snake Game" style="-fx-font-size: 20"/>
-            <Button text="Start" onAction="#switchAndStartGame"/>
-            <Button text="Settings" onAction="#openSettings"/>
-            <Button text="Exit" onAction="#exit"/>
-        </VBox>
-    </HBox>
-</VBox>
+
+    <scene>
+        <Scene>
+            <VBox fx:id="root"
+                  prefHeight="400.0" prefWidth="600.0" maxHeight="Infinity" maxWidth="Infinity"
+                  alignment="CENTER"
+                  stylesheets="@common.css">
+
+                <StackPane VBox.vgrow="ALWAYS" maxHeight="Infinity" maxWidth="Infinity">
+                    <HBox alignment="CENTER">
+                        <VBox spacing="20" alignment="CENTER">
+                            <Label text="The Snake Game" style="-fx-font-size: 20"/>
+                            <Button text="Start" onAction="#switchAndStartGame"/>
+                            <Button text="Settings" onAction="#openSettings"/>
+                            <Button text="Exit" onAction="#exit"/>
+                        </VBox>
+                    </HBox>
+
+                    <fx:include fx:id="gameScreen" source="GameScreen.fxml" visible="false"/>
+                </StackPane>
+            </VBox>
+        </Scene>
+    </scene>
+</Stage>
