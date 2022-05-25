@@ -4,28 +4,35 @@ import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
-import java.util.Optional;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * Main controller, acts as mediator for other controllers
  */
-public class MainViewController extends AbstractController {
+public class MainViewController extends AbstractController implements Initializable {
 
     private final BooleanProperty gameRunning = new SimpleBooleanProperty(false);
 
+    @FXML
+    public VBox gameScreen;
     @FXML
     private VBox root;
     @FXML
     private GameScreenController gameScreenController;
     @FXML
     private SettingsController settingsController;
+    @FXML
+    private Stage settingsWindow;
 
     @Override
-    protected Optional<Stage> getStage() {
-        return Optional.ofNullable((Stage) root.getScene().getWindow());
+    protected Stage getStage() {
+        return (Stage) root.getScene().getWindow();
     }
 
     /**
@@ -33,7 +40,7 @@ public class MainViewController extends AbstractController {
      */
     @FXML
     private void switchAndStartGame() {
-        getStage().orElseThrow().getScene().setRoot(gameScreenController.getRoot());
+        gameScreen.setVisible(true);
         gameScreenController.start();
         gameRunning.set(true);
     }
@@ -57,7 +64,7 @@ public class MainViewController extends AbstractController {
      */
     @FXML
     public void openSettings() {
-        settingsController.openWindow();
+        settingsWindow.show();
     }
 
     /**
@@ -72,7 +79,7 @@ public class MainViewController extends AbstractController {
     }
 
     public void switchToMainMenu() {
-        Stage.getWindows().get(0).getScene().setRoot(root);
+        gameScreen.setVisible(false);
         gameScreenController.stop();
         gameRunning.set(false);
     }
@@ -87,5 +94,11 @@ public class MainViewController extends AbstractController {
      */
     public void restartGame() {
         gameScreenController.restart();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        settingsWindow.initOwner(getStage());
+        settingsWindow.initStyle(StageStyle.UNDECORATED);
     }
 }

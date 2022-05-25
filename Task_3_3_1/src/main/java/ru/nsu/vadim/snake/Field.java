@@ -1,13 +1,10 @@
 package ru.nsu.vadim.snake;
 
 import ru.nsu.vadim.snake.point.EnvironmentPoint;
-import ru.nsu.vadim.snake.point.FoodPoint;
 import ru.nsu.vadim.snake.point.Point;
-import ru.nsu.vadim.snake.point.PointType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Field of the game
@@ -48,36 +45,6 @@ public class Field {
      */
     public void set(Point point) {
         points.get(point.x()).set(point.y(), point);
-    }
-
-    /**
-     * Generate random food point and place it in the field
-     *
-     * @return generated point
-     */
-    public Point generateFoodPoint() {
-        Point point = randomPoint(FoodPoint.FOOD_POINT);
-        set(point);
-        return point;
-    }
-
-    private Point randomPoint(PointType pointType) {
-        Random random = new Random();
-        return new Point(
-                random.nextInt(WIDTH),
-                random.nextInt(HEIGHT),
-                pointType);
-    }
-
-    /**
-     * Generates random obstacle point and place it in the field
-     *
-     * @return generated point
-     */
-    public Point generateObstaclePoint() {
-        Point point = randomPoint(EnvironmentPoint.OBSTACLE);
-        set(point);
-        return point;
     }
 
     /**

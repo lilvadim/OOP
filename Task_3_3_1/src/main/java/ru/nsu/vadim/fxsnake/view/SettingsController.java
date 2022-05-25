@@ -2,7 +2,6 @@ package ru.nsu.vadim.fxsnake.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -11,12 +10,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -68,24 +65,12 @@ public class SettingsController extends AbstractController implements Initializa
     }
 
     @Override
-    protected Optional<Stage> getStage() {
-        return root.getScene() == null ? Optional.empty() : Optional.ofNullable((Stage) root.getScene().getWindow());
-    }
-
-    public void openWindow() {
-        Stage stage = getStage()
-                .orElseGet(() -> new Stage(StageStyle.UNDECORATED));
-        Stage primary = (Stage) Stage.getWindows().get(0);
-        if (stage.getOwner() == null) {
-            stage.initOwner(primary);
-        }
-        stage.setScene(
-                getRoot().getScene() == null ? new Scene(getRoot()) : getRoot().getScene());
-        stage.show();
+    protected Stage getStage() {
+        return (Stage) root.getScene().getWindow();
     }
 
     public void closeWindow() {
-        getStage().orElseThrow().hide();
+        getStage().hide();
     }
 
     @Override

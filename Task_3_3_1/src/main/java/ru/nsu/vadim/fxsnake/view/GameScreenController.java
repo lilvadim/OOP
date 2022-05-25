@@ -18,6 +18,7 @@ import ru.nsu.vadim.snake.XYPair;
 import ru.nsu.vadim.snake.point.EnvironmentPoint;
 import ru.nsu.vadim.snake.point.FoodPoint;
 import ru.nsu.vadim.snake.point.Point;
+import ru.nsu.vadim.snake.point.PointGenerator;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -43,6 +44,9 @@ public class GameScreenController extends AbstractController implements Initiali
     private Provider<MainViewController> mainViewControllerProvider;
     @Inject
     private Preferences preferences;
+    @Inject
+    private PointGenerator pointGenerator;
+
     private final List<Point> obstacles = new ArrayList<>();
     private final Set<Point> foods = new HashSet<>();
     private Field field;
@@ -90,6 +94,7 @@ public class GameScreenController extends AbstractController implements Initiali
      * Restart game
      */
     public void restart() {
+        container.requestFocus();
         initValues();
         updateView();
         gameLoopTimer.start();
@@ -133,23 +138,23 @@ public class GameScreenController extends AbstractController implements Initiali
 
     private void generateFoodPoints() {
         while (foods.size() < food) {
-            Point foodPoint = field.generateFoodPoint();
+            Point foodPoint = pointGenerator.random(FoodPoint.FOOD_POINT);
             if (obstacles.stream().noneMatch(point -> XYPair.intersect(point, foodPoint))
                     && snake.getPoints().stream().noneMatch(point -> XYPair.intersect(point, foodPoint))) {
+                field.set(foodPoint);
                 foods.add(foodPoint);
-            } else {
-                field.clear(foodPoint.x(), foodPoint.y());
             }
         }
     }
 
     private void generateObstacles() {
-        for (int i = 0; i < Math.min(field.getHeight(), field.getWidth()); i++) {
-            Point obstacle = field.generateObstaclePoint();
+        var min = Math.min(field.getHeight(), field.getWidth());
+        for (int i = 0; i < min; i++) {
+            Point obstacle = pointGenerator.random(EnvironmentPoint.OBSTACLE);
             if (obstacle.x() > 0 && obstacle.y() > 0) {
+                field.set(obstacle);
                 obstacles.add(obstacle);
             } else {
-                field.clear(obstacle.x(), obstacle.y());
                 i--;
             }
         }
@@ -206,6 +211,7 @@ public class GameScreenController extends AbstractController implements Initiali
      * Update the game screen
      */
     private void updateView() {
+        container.getChildren().clear();
         for (int x = 0; x < field.getWidth(); x++) {
             for (int y = 0; y < field.getHeight(); y++) {
                 var point = field.get(x, y);
@@ -243,11 +249,11 @@ public class GameScreenController extends AbstractController implements Initiali
      */
     private Rectangle createRectangle(Point point) {
         var rect = new Rectangle();
-        var stage = getStage().orElseGet(() -> (Stage) Stage.getWindows().get(0));
 
-        double side = Math.min(scale, 0.9) * (stage.getHeight() <= stage.getWidth() ?
-                stage.getHeight() / field.getHeight()
-                : stage.getWidth() / field.getWidth());
+        var side = Math.min(container.getHeight() / field.getHeight(),
+                container.getWidth() / field.getWidth())
+                * scale;
+
         rect.setWidth(side);
         rect.setHeight(side);
         rect.setX(side * point.x());
@@ -256,17 +262,8 @@ public class GameScreenController extends AbstractController implements Initiali
     }
 
     @Override
-    protected Optional<Stage> getStage() {
-        return Optional.ofNullable((Stage) container.getScene().getWindow());
-    }
-
-    /**
-     * Root pane
-     *
-     * @return root
-     */
-    public Pane getRoot() {
-        return root;
+    protected Stage getStage() {
+        return (Stage) container.getScene().getWindow();
     }
 
     /**
