@@ -1,4 +1,4 @@
-package ru.nsu.vadim.dsl
+package ru.nsu.vadim.model
 
 import java.time.LocalDate
 

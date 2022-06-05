@@ -1,6 +1,8 @@
 package ru.nsu.vadim.dsl
 
-import java.time.LocalDate
+import ru.nsu.vadim.model.Group
+import ru.nsu.vadim.model.Task
+import ru.nsu.vadim.model.Tasks
 import java.time.format.DateTimeFormatter
 
 @ConfigMarker
@@ -12,9 +14,15 @@ class Configuration {
             dateTimeFormatter = DateTimeFormatter.ofPattern(value)
         }
 
+    fun Task.folderName(): String = taskFolderName()
+
     companion object Settings {
+        const val DEFAULT_PATTERN = "dd.MM.yyyy"
+
         var dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DEFAULT_PATTERN)
             private set
+
+        var taskFolderName: Task.() -> String = { "Task_{${id.replace(".", "_")}}" }
     }
 
     lateinit var group: Group
@@ -26,16 +34,3 @@ class Configuration {
 
     fun tasks(init: Tasks.() -> Unit) = tasks.init()
 }
-
-const val DEFAULT_PATTERN = "dd.MM.yyyy"
-
-fun Tasks.task(id: String, deadline: String, init: Task.() -> Unit = {}) =
-    task(id, LocalDate.parse(deadline, Configuration.dateTimeFormatter), init)
-
-fun Lessons.lesson(date: String) = lesson(LocalDate.parse(date, Configuration.dateTimeFormatter))
-
-fun Grades.grade(name: String, date: String) =
-    grade(name, LocalDate.parse(date, Configuration.dateTimeFormatter))
-
-fun config(init: Configuration.() -> Unit): Configuration = Configuration().apply(init)
-
