@@ -1,8 +1,9 @@
-package ru.nsu.vadim
+package ru.nsu.vadim.dsl
 
+import ru.nsu.vadim.Configuration
+import ru.nsu.vadim.Task
+import ru.nsu.vadim.Tasks
 import java.time.LocalDate
-
-typealias Tasks = MutableList<Task>
 
 open class TasksBuilder(private val tasks: Tasks = mutableListOf()) {
     fun task(id: String, deadline: LocalDate) {

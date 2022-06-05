@@ -1,9 +1,12 @@
 package ru.nsu.vadim
 
+import ru.nsu.vadim.dsl.config
+import ru.nsu.vadim.dsl.group
+import ru.nsu.vadim.dsl.tasks
 import java.time.LocalDate
 
 fun main(args: Array<String>) {
-    Configuration {
+    config {
         tasks {
             task(id = "1.2", deadline = LocalDate.now())
             task(id = "3.3.1", LocalDate.now())

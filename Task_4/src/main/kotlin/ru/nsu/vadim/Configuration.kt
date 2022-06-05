@@ -1,11 +1,9 @@
 package ru.nsu.vadim
 
-class Configuration(init: Configuration.() -> Unit) {
+typealias Tasks = MutableList<Task>
+
+class Configuration {
     lateinit var group: Group
     val tasks: Tasks = mutableListOf()
-
-    init {
-        this.init()
-    }
 }
 
