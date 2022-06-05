@@ -61,5 +61,6 @@ class ConfigurationTest {
             config.group[0].grades
         )
         assertEquals(3, config.group[0].lessons.size)
+        assertEquals("Task-1.2", config.tasks[0].taskFolderName())
     }
 }
