@@ -27,17 +27,17 @@ class ConfigurationTest {
                 student(name = "Vadim Mostovoy") {
                     repositoryUrl = ""
                     username = "lilvadim"
+
+                    grades {
+                        grade("Excellent", "22.05.2022")
+                    }
+
+                    lessons {
+                        lesson("12.03.2022")
+                        lesson("19.03.2022")
+                        lesson("26.03.2022")
+                    }
                 }
-            }
-
-            grades {
-                grade("Excellent", "22.05.2022")
-            }
-
-            lessons {
-                lesson("12.03.2022")
-                lesson("19.03.2022")
-                lesson("26.03.2022")
             }
         }
 
@@ -47,14 +47,15 @@ class ConfigurationTest {
         assertEquals(
             listOf(
                 Grade(
-                    "Excellent", LocalDate.parse(
+                    "Excellent",
+                    LocalDate.parse(
                         "22.05.2022",
                         DateTimeFormatter.ofPattern("dd.MM.yyyy")
                     )
                 )
             ),
-            config.grades
+            config.group[0].grades
         )
-        assertEquals(3, config.lessons.size)
+        assertEquals(3, config.group[0].lessons.size)
     }
 }
