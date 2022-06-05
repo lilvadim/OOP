@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter
 
 @ConfigMarker
 class Configuration {
+    var totalLessonsCount: Int = 16
+
     var dateTimePattern: String = DEFAULT_PATTERN
         set(value) {
             dateTimeFormatter = DateTimeFormatter.ofPattern(value)
