@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
             task(id = "3.3.1", LocalDate.now())
         }
 
-        group("20214") {
+        group(id = "20214") {
             student(name = "Vadim Mostovoy") {
                 repositoryUrl = ""
                 username = "lilvadim"
