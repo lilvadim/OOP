@@ -14,8 +14,6 @@ class Configuration {
             dateTimeFormatter = DateTimeFormatter.ofPattern(value)
         }
 
-    fun Task.folderName(): String = taskFolderName()
-
     companion object Settings {
         const val DEFAULT_PATTERN = "dd.MM.yyyy"
 
