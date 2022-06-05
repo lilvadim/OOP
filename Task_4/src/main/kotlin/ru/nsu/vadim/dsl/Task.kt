@@ -5,7 +5,7 @@ import java.time.LocalDate
 @ConfigMarker
 data class Task(var id: String, var deadline: LocalDate, var description: Description = Description()) {
 
-    fun toConventionName(): String = "Task_${convertId(id)}"
+    fun toConventionName() = "Task_${convertId(id)}"
 
     data class Description(var id: String = "", var text: String = "", var score: Int = 1)
 
