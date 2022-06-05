@@ -3,4 +3,4 @@ package ru.nsu.vadim.model
 import ru.nsu.vadim.dsl.ConfigMarker
 
 @ConfigMarker
-class Tasks(private val tasks: MutableList<Task> = mutableListOf()) : MutableList<Task> by tasks
+data class Tasks(private val tasks: MutableList<Task> = mutableListOf()) : MutableList<Task> by tasks

@@ -31,4 +31,27 @@ class Configuration {
     }
 
     fun tasks(init: Tasks.() -> Unit) = tasks.init()
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Configuration
+
+        if (totalLessonsCount != other.totalLessonsCount) return false
+        if (dateTimePattern != other.dateTimePattern) return false
+        if (group != other.group) return false
+        if (tasks != other.tasks) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = totalLessonsCount
+        result = 31 * result + dateTimePattern.hashCode()
+        result = 31 * result + group.hashCode()
+        result = 31 * result + tasks.hashCode()
+        return result
+    }
+
+
 }

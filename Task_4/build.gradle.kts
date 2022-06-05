@@ -14,6 +14,14 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation(kotlin("script-runtime"))
+
+    implementation(kotlin("stdlib"))
+    implementation(kotlin("reflect"))
+    implementation(kotlin("script-runtime"))
+    implementation(kotlin("compiler-embeddable"))
+    implementation(kotlin("script-util"))
+    implementation(kotlin("scripting-compiler-embeddable"))
 }
 
 tasks.test {
