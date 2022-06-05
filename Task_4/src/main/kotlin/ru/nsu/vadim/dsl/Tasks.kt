@@ -3,6 +3,7 @@ package ru.nsu.vadim.dsl
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@ConfigMarker
 class Tasks(
     private val tasks: MutableList<Task> = mutableListOf(),
     val dateTimeFormatter: DateTimeFormatter

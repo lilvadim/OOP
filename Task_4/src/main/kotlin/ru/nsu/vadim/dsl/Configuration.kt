@@ -2,6 +2,7 @@ package ru.nsu.vadim.dsl
 
 import java.time.format.DateTimeFormatter
 
+@ConfigMarker
 class Configuration {
 
     var dateTimePattern: String = "dd.MM.yyyy"
