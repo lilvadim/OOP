@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter
 
 @ConfigMarker
 class Configuration {
-
     var dateTimePattern: String = DEFAULT_PATTERN
         set(value) {
             dateTimeFormatter = DateTimeFormatter.ofPattern(value)
@@ -13,6 +12,7 @@ class Configuration {
 
     companion object Settings {
         var dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DEFAULT_PATTERN)
+            private set
     }
 
     lateinit var group: Group
