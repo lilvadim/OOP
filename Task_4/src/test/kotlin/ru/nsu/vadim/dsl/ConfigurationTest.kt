@@ -10,6 +10,7 @@ class ConfigurationTest {
     fun test() {
         val config = config {
             dateTimePattern = "dd.MM.yyyy"
+            totalLessonsCount = 8
 
             tasks {
                 task(id = "1.2", deadline = LocalDate.now()) {
