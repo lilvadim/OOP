@@ -1,4 +1,4 @@
-package ru.nsu.vadim.dsl
+package ru.nsu.vadim.model
 
 data class Student(
     val name: String,
@@ -7,7 +7,4 @@ data class Student(
     var branch: String = "master",
     val grades: Grades = Grades(),
     val lessons: Lessons = Lessons(),
-) {
-    fun grades(init: Grades.() -> Unit) = grades.init()
-    fun lessons(init: Lessons.() -> Unit) = lessons.init()
-}
+)

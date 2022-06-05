@@ -1,6 +1,8 @@
 package ru.nsu.vadim.dsl
 
 import org.junit.jupiter.api.Test
+import ru.nsu.vadim.dsl.Configuration.Settings.taskFolderName
+import ru.nsu.vadim.model.Grade
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import kotlin.test.assertEquals
@@ -11,6 +13,7 @@ class ConfigurationTest {
         val config = config {
             dateTimePattern = "dd.MM.yyyy"
             totalLessonsCount = 8
+            taskFolderName = { "Task-${id}" }
 
             tasks {
                 task(id = "1.2", deadline = LocalDate.now()) {
