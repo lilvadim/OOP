@@ -1,22 +1,17 @@
 package ru.nsu.vadim.dsl
 
-import ru.nsu.vadim.Configuration
-import ru.nsu.vadim.Task
-import ru.nsu.vadim.Tasks
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-open class TasksBuilder(private val tasks: Tasks = mutableListOf()) {
-    fun task(id: String, deadline: LocalDate) {
-        tasks += (Task(id, deadline))
+class Tasks(
+    private val tasks: MutableList<Task> = mutableListOf(),
+    val dateTimeFormatter: DateTimeFormatter
+) : MutableList<Task> by tasks {
+
+    fun task(id: String, deadline: LocalDate, init: Task.() -> Unit = {}) {
+        tasks += Task(id, deadline).apply(init)
     }
 
-    fun task(id: String, deadline: String) = task(id, LocalDate.parse(deadline))
-
-    fun build() = tasks
-}
-
-fun Configuration.tasks(init: TasksBuilder.() -> Unit) {
-    val tasksBuilder = TasksBuilder()
-    tasksBuilder.init()
-    tasks.addAll(tasksBuilder.build())
+    fun task(id: String, deadline: String, init: Task.() -> Unit = {}) =
+        task(id, LocalDate.parse(deadline, dateTimeFormatter), init)
 }
