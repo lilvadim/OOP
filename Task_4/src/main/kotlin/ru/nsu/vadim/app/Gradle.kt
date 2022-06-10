@@ -10,12 +10,9 @@ import java.io.File
  */
 typealias TestBuild = Pair<Boolean, Boolean>
 
-/**
- * Test and build Gradle project
- */
 fun App.testAndBuild(projectDir: String): TestBuild {
 
-    val projectConnection = projectConnection(projectDir, gradleVersion)
+    val projectConnection = projectConnection(projectDir)
 
     var testRes: Boolean
     var buildRes: Boolean
@@ -45,12 +42,13 @@ fun App.testAndBuild(projectDir: String): TestBuild {
     }
 }
 
-private fun projectConnection(projectDir: String, gradleVersion: String) = GradleConnector.newConnector()
-    .forProjectDirectory(File(projectDir))
-    .useGradleVersion(gradleVersion).connect()
+private fun App.projectConnection(projectDir: String) =
+    GradleConnector.newConnector()
+        .forProjectDirectory(File(projectDir))
+        .useGradleVersion(gradleVersion).connect()
 
-fun App.doc(projectDir: String) {
-    val projectConnection = projectConnection(projectDir, gradleVersion)
+fun App.docs(projectDir: String) {
+    val projectConnection = projectConnection(projectDir)
 
     val build = projectConnection.newBuild()
         .forTasks("javadoc")

@@ -2,17 +2,17 @@ package ru.nsu.vadim.app
 
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
-import kotlinx.cli.default
 import ru.nsu.vadim.dsl.Configuration
+import ru.nsu.vadim.model.Group
 import ru.nsu.vadim.model.Student
 import ru.nsu.vadim.model.Task
+import java.io.BufferedWriter
 import java.io.File
 import kotlin.system.exitProcess
 
 
 const val DEFAULT_GRADLE_VER = "7.4.2"
-const val DEFAULT_CFG_PATH: String = "config.kts"
-const val DEFAULT_REPOS_SUBDIR: String = "repos"
+private const val DEFAULT_CFG_NAME: String = "config.kts"
 
 /**
  * Contains app logic
@@ -21,8 +21,9 @@ class App {
 
     private val argParser: ArgParser = ArgParser("oop-tester")
 
-    lateinit var configuration: Configuration
-        private set
+    private val DEFAULT_CFG_PATH: String by lazy { "$workingDirPath/$DEFAULT_CFG_NAME" }
+
+    val gradleVersion: String = DEFAULT_GRADLE_VER
 
     val workingDirPath: String by argParser.argument(
         type = ArgType.String,
@@ -30,104 +31,94 @@ class App {
         description = "Working directory to lookup config and store cloned repos",
     )
 
-    val gradleVersion: String = DEFAULT_GRADLE_VER
-
-    val reposSubDir: String = DEFAULT_REPOS_SUBDIR
-
-    private val configPath: String by argParser.option(
+    private val configPath: String? by argParser.option(
         type = ArgType.String,
         fullName = "config",
         shortName = "c",
-        description = "Configuration file path to be used instead of default one (config.kts)"
-    ).default(DEFAULT_CFG_PATH)
+        description = "Configuration file path to be used instead of default one " +
+                "(config.kts in root of working directory)"
+    )
 
-    val repoName: Student.() -> String by lazy { configuration.studentRepoFolderPattern }
+    private val gitHubPersonalAccessToken: String? by argParser.option(
+        type = ArgType.String,
+        fullName = "token",
+        shortName = "t",
+        description = "Use specified GitHub Personal Access Token to authenticate"
+    )
 
-    val folderName: Task.() -> String by lazy { configuration.taskFolderPattern }
+    val configuration: Configuration by lazy {
+        val scriptString = File(configPath ?: DEFAULT_CFG_PATH).readText()
+        parse(scriptString)
+    }
+
+    fun Task.folderName() = (configuration.taskFolderPattern)(this)
+
+    fun Group.folderName() = (configuration.groupFolderPattern)(this)
+
+    fun Student.repoFolderName() = (configuration.studentRepoFolderPattern)(this)
 
     fun main(args: Array<String>) {
-
-        val token by argParser.option(
-            type = ArgType.String,
-            fullName = "token",
-            shortName = "t",
-            description = "Use specified GitHub Personal Access Token to authenticate"
-        )
-
-        val out by argParser.option(
-            type = ArgType.String,
-            fullName = "output",
-            shortName = "o",
-            description = "File to write report"
-        )
-
-        val doc by argParser.option(
-            type = ArgType.Boolean,
-            fullName = "doc",
-            shortName = "d",
-            description = "Run Gradle Javadoc"
-        ).default(false)
-
         argParser.parse(args)
 
-        val scriptString = File("$workingDirPath/${configPath}").readText()
-
-        configuration = parse(scriptString)
-
         try {
-            if (token == null) {
+            if (gitHubPersonalAccessToken == null) {
                 downloadGitRepos()
             } else {
-                downloadGitRepos(token = token!!, useToken = true)
+                downloadGitRepos(token = gitHubPersonalAccessToken!!, useToken = true)
             }
         } catch (ex: IllegalStateException) {
             ex.printStackTrace()
             exitProcess(1)
         }
 
-        val reportCollection = mutableListOf<Report.ResultForStudent>()
+        val bufferedWriter = configuration.reportFile?.writer()?.let { BufferedWriter(it) }
 
-        for (student in configuration.group) {
+        val groupReports = mutableListOf<GroupReport>()
+        bufferedWriter.use { fileWriter ->
+            for (group in configuration.groups) {
+                val perGroupReportResults = mutableListOf<GroupReport.ResultForStudent>()
 
-            val attendance = attendance(student)
+                for (student in group) {
+                    val attendance = attendance(group, student)
+                    val perStudentTaskTestBuildResults = mutableMapOf<Task, TestBuild>()
+                    for (task in configuration.tasks) {
+                        resetToLastCommitBeforeDate(task.deadline, repoPath(group, student))
+                        val projectDir = projectPath(repoPath(group, student), task)
+                        perStudentTaskTestBuildResults += task to testAndBuild(projectDir)
 
-            val taskTestBuildResults = mutableMapOf<Task, TestBuild>()
+                        if (configuration.withDocs) {
+                            docs(projectDir)
+                        }
+                    } // for tasks
 
-            for (task in configuration.tasks) {
+                    perGroupReportResults += GroupReport.ResultForStudent(
+                        student,
+                        attendance,
+                        perStudentTaskTestBuildResults
+                    )
+                } // for students
 
-                resetToLastCommitBeforeDate(task.deadline, repoPath(student))
+                groupReports += GroupReport(
+                    groupID = group.id,
+                    totalLessonsCount = configuration.lessons.size,
+                    testResults = perGroupReportResults,
+                )
+            } // for groups
 
-                val projectDir = projectPath(repoPath(student), task)
-
-                if (doc) {
-                    doc(projectDir)
-                }
-
-                taskTestBuildResults += task to testAndBuild(projectDir)
-
+            if (configuration.reportFile == null) {
+                System.out.append(convertToHtml(groupReports))
+            } else {
+                fileWriter?.append(convertToHtml(groupReports))
             }
-
-            reportCollection += Report.ResultForStudent(
-                student,
-                attendance,
-                taskTestBuildResults
-            )
-        }
-
-        val report = Report(configuration.group.id, reportCollection, configuration.lessons.size)
-
-        if (out == null) {
-            println(report.toHtml())
-        } else {
-            File(out!!.replaceFirst("~", userHomeDir())).writeText(report.toHtml())
-        }
-    }
+        } // writer use
+    } // main
 }
 
 /**
  * Full path to student's repo folder
  */
-fun App.repoPath(student: Student) = "$workingDirPath/$reposSubDir/${student.repoName()}"
+fun App.repoPath(group: Group, student: Student) =
+    "$workingDirPath/${configuration.reposSubDir}/${group.folderName()}/${student.repoFolderName()}"
 
 /**
  * Full path to tasks folder in repo
