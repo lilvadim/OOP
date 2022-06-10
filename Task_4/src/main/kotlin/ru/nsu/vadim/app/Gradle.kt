@@ -10,48 +10,40 @@ import java.io.File
  */
 typealias TestBuild = Pair<Boolean, Boolean>
 
-fun App.testAndBuild(projectDir: String): TestBuild {
+fun App.testAndBuild(projectDir: String): TestBuild = projectConnection(projectDir).use { connection ->
 
-    val projectConnection = projectConnection(projectDir)
+    val testRes: Boolean
+    val buildRes: Boolean
 
-    var testRes: Boolean
-    var buildRes: Boolean
+    var build = connection.newBuild().forTasks("build")
 
-    projectConnection.use { connection ->
-
-        var build = connection.newBuild().forTasks("build")
-
-        buildRes = try {
-            build.run()
-            true
-        } catch (ex: Exception) {
-            println(ex.localizedMessage)
-            false
-        }
-
-        build = connection.newBuild().forTasks("test")
-        testRes = try {
-            build.run()
-            true
-        } catch (ex: Exception) {
-            println(ex.localizedMessage)
-            false
-        }
-
-        return TestBuild(testRes, buildRes)
+    buildRes = try {
+        build.run()
+        true
+    } catch (ex: Exception) {
+        println(ex.localizedMessage)
+        false
     }
+
+    build = connection.newBuild().forTasks("test")
+
+    testRes = try {
+        build.run()
+        true
+    } catch (ex: Exception) {
+        println(ex.localizedMessage)
+        false
+    }
+
+    return TestBuild(testRes, buildRes)
 }
+
 
 private fun App.projectConnection(projectDir: String) =
     GradleConnector.newConnector()
         .forProjectDirectory(File(projectDir))
         .useGradleVersion(gradleVersion).connect()
 
-fun App.docs(projectDir: String) {
-    val projectConnection = projectConnection(projectDir)
-
-    val build = projectConnection.newBuild()
-        .forTasks("javadoc")
-
-    build.run()
+fun App.docs(projectDir: String) = projectConnection(projectDir).use { connection ->
+    connection.newBuild().forTasks("javadoc").run()
 }
