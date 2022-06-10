@@ -28,12 +28,15 @@ fun Lessons.lesson(date: LocalDate) {
 fun Lessons.lesson(date: String) = lesson(LocalDate.parse(date, Configuration.dateTimeFormatter))
 
 fun Tasks.task(id: String, deadline: LocalDate, init: Task.() -> Unit = {}) {
-    this += Task(id, deadline).apply(init)
+    this += Task(
+        id,
+        if (!deadlineInclusive) deadline else deadline.plusDays(1)
+    ).apply(init)
 }
 
 fun Tasks.task(id: String, deadline: String, init: Task.() -> Unit = {}) =
     task(id, LocalDate.parse(deadline, Configuration.dateTimeFormatter), init)
 
-fun Task.description(id: String, init: Task.Description.() -> Unit) {
+fun Task.description(id: String, init: Task.Description.() -> Unit = {}) {
     description = Task.Description(id = id).apply(init)
 }

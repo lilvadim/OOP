@@ -13,7 +13,7 @@ class ConfigurationTest {
         val config = SAMPLE_CONFIG
 
         assertEquals(1, config.tasks.size)
-        assertEquals(1, config.group.size)
+        assertEquals(1, config.groups.size)
         assertEquals("3.3.1", config.tasks[0].id)
         assertEquals(
             listOf(
@@ -25,7 +25,7 @@ class ConfigurationTest {
                     )
                 )
             ),
-            config.group[0].grades
+            config.groups[0][0].grades
         )
 
         assertEquals(3, config.lessons.size)
