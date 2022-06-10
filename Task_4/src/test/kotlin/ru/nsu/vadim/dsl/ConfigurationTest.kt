@@ -1,7 +1,6 @@
 package ru.nsu.vadim.dsl
 
 import org.junit.jupiter.api.Test
-import ru.nsu.vadim.dsl.Configuration.Settings.taskFolderName
 import ru.nsu.vadim.model.Grade
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -9,12 +8,13 @@ import kotlin.test.assertEquals
 
 class ConfigurationTest {
     @Test
-    fun test() {
-        val config = testConfiguration()
+    fun `test if DSL is working fine`() {
 
-        assertEquals(2, config.tasks.size)
+        val config = SAMPLE_CONFIG
+
+        assertEquals(1, config.tasks.size)
         assertEquals(1, config.group.size)
-        assertEquals("3.3.1", config.tasks[1].id)
+        assertEquals("3.3.1", config.tasks[0].id)
         assertEquals(
             listOf(
                 Grade(
@@ -27,7 +27,12 @@ class ConfigurationTest {
             ),
             config.group[0].grades
         )
-        assertEquals(3, config.group[0].lessons.size)
-        assertEquals("Task-1.2", config.tasks[0].taskFolderName())
+
+        assertEquals(3, config.lessons.size)
+        assertEquals("Task_3_3_1",
+            with(config) {
+                tasks[0].taskFolderPattern()
+            }
+        )
     }
 }
