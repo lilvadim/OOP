@@ -1,4 +1,4 @@
 package ru.nsu.vadim.dsl
 
 @DslMarker
-annotation class ConfigMarker()
+annotation class ConfigMarker

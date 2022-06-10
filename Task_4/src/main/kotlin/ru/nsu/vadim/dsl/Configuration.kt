@@ -1,34 +1,31 @@
 package ru.nsu.vadim.dsl
 
-import ru.nsu.vadim.model.Group
-import ru.nsu.vadim.model.Task
-import ru.nsu.vadim.model.Tasks
+import ru.nsu.vadim.model.*
 import java.time.format.DateTimeFormatter
 
 @ConfigMarker
 class Configuration {
-    var totalLessonsCount: Int = 16
-
     var dateTimePattern: String = DEFAULT_PATTERN
         set(value) {
             dateTimeFormatter = DateTimeFormatter.ofPattern(value)
         }
 
-    companion object Settings {
-        const val DEFAULT_PATTERN = "dd.MM.yyyy"
-
-        var dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DEFAULT_PATTERN)
-            private set
-
-        var taskFolderName: Task.() -> String = { "Task_{${id.replace(".", "_")}}" }
+    init {
+        dateTimeFormatter = DateTimeFormatter.ofPattern(dateTimePattern)
     }
 
     lateinit var group: Group
     val tasks: Tasks = Tasks()
+    val lessons: Lessons = Lessons()
+
+    var taskFolderPattern: Task.() -> String = DEFAULT_TASK_FOLDER_PATTERN
+    var studentRepoFolderPattern: Student.() -> String = DEFAULT_STUDENT_REPO_PATTERN
 
     fun group(id: String, init: Group.() -> Unit) {
         group = Group(id).apply(init)
     }
+
+    fun lessons(init: Lessons.() -> Unit) = lessons.init()
 
     fun tasks(init: Tasks.() -> Unit) = tasks.init()
     override fun equals(other: Any?): Boolean {
@@ -37,21 +34,26 @@ class Configuration {
 
         other as Configuration
 
-        if (totalLessonsCount != other.totalLessonsCount) return false
-        if (dateTimePattern != other.dateTimePattern) return false
         if (group != other.group) return false
         if (tasks != other.tasks) return false
+        if (lessons != other.lessons) return false
 
         return true
     }
 
     override fun hashCode(): Int {
-        var result = totalLessonsCount
-        result = 31 * result + dateTimePattern.hashCode()
-        result = 31 * result + group.hashCode()
+        var result = group.hashCode()
         result = 31 * result + tasks.hashCode()
+        result = 31 * result + lessons.hashCode()
         return result
     }
 
+    companion object {
+        const val DEFAULT_PATTERN = "dd.MM.yyyy"
+        val DEFAULT_STUDENT_REPO_PATTERN: Student.() -> String = { name }
+        val DEFAULT_TASK_FOLDER_PATTERN: Task.() -> String = { "Task_${id.replace(".", "_")}" }
 
+        var dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern(DEFAULT_PATTERN)
+            private set
+    }
 }
