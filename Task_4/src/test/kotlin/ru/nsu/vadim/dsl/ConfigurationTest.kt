@@ -28,7 +28,7 @@ class ConfigurationTest {
             config.groups[0][0].grades
         )
 
-        assertEquals(3, config.lessons.size)
+        assertEquals(2, config.lessonsPerGroup.size)
         assertEquals("Task_3_3_1",
             with(config) {
                 tasks[0].taskFolderPattern()

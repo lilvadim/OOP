@@ -23,14 +23,15 @@ class Configuration {
 
     val groups: MutableList<Group> = mutableListOf()
     val tasks: Tasks = Tasks()
-    val lessons: Lessons = Lessons()
 
-    private var _withDocs = false
-    val withDocs: Boolean
-        get() {
-            _withDocs = true
-            return _withDocs
-        }
+    private val lessonsPerGroupHolder: MutableMap<String, Lessons> = mutableMapOf()
+    val lessonsPerGroup: MutableMap<Group, Lessons> by lazy {
+        lessonsPerGroupHolder.mapKeys { (key, _) ->
+            groups.find { it.id == key }!!
+        }.toMutableMap()
+    }
+
+    var withDocs = false
 
     var reposSubDir = DEFAULT_REPOS_SUBDIR
     var taskFolderPattern: Task.() -> String = DEFAULT_TASK_FOLDER_PATTERN
@@ -42,10 +43,14 @@ class Configuration {
         groups += Group(id).apply(init)
     }
 
-    fun lessons(init: Lessons.() -> Unit) = lessons.init()
+    fun lessonsForGroups(vararg groupIds: String, init: Lessons.() -> Unit) {
+        val lessons = Lessons().apply(init)
+        for (gid in groupIds) {
+            lessonsPerGroupHolder += gid to lessons
+        }
+    }
 
     fun tasks(init: Tasks.() -> Unit) = tasks.init()
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -55,7 +60,10 @@ class Configuration {
         if (dateTimePattern != other.dateTimePattern) return false
         if (groups != other.groups) return false
         if (tasks != other.tasks) return false
-        if (lessons != other.lessons) return false
+        if (lessonsPerGroup != other.lessonsPerGroup) return false
+        if (withDocs != other.withDocs) return false
+        if (reposSubDir != other.reposSubDir) return false
+        if (reportFile != other.reportFile) return false
 
         return true
     }
@@ -64,7 +72,10 @@ class Configuration {
         var result = dateTimePattern.hashCode()
         result = 31 * result + groups.hashCode()
         result = 31 * result + tasks.hashCode()
-        result = 31 * result + lessons.hashCode()
+        result = 31 * result + lessonsPerGroup.hashCode()
+        result = 31 * result + withDocs.hashCode()
+        result = 31 * result + reposSubDir.hashCode()
+        result = 31 * result + (reportFile?.hashCode() ?: 0)
         return result
     }
 

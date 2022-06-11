@@ -10,7 +10,7 @@ val SAMPLE_CONFIG =
         studentRepoFolderPattern = { username }
         reposSubDir = "git"
         reportFile = File("/Users/vadim/report.html")
-        withDocs
+        withDocs = true
 
         tasks {
             deadlineInclusive = true
@@ -27,10 +27,15 @@ val SAMPLE_CONFIG =
             }
         }
 
-        lessons {
+        lessonsForGroups("20214") {
             lesson("02.06.2022")
             lesson("19.03.2022")
             lesson("26.03.2022")
+            lesson("03.06.2022")
+        }
+
+        lessonsForGroups("20215") {
+            lesson("30.06.2022")
         }
 
         group(id = "20214") {

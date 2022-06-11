@@ -93,7 +93,7 @@ fun App.attendance(group: Group, student: Student): Int {
 
     var count = 0
 
-    for ((date) in configuration.lessons) {
+    for ((date) in configuration.lessonsPerGroup[group]!!) {
         val (since, to) = week(date)
 
         val revFilter = CommitTimeRevFilter.between(since.convertToDate(), to.convertToDate())
@@ -116,7 +116,7 @@ fun App.attendance(group: Group, student: Student): Int {
  */
 fun week(date: LocalDate): Pair<LocalDate, LocalDate> {
     val weekStart = date.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))!!
-    val weekEnd = date.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))!!
+    val weekEnd = date.with(TemporalAdjusters.next(DayOfWeek.MONDAY))!!
 
     return Pair(weekStart, weekEnd)
 }
