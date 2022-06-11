@@ -9,7 +9,7 @@ val SAMPLE_CONFIG =
         groupFolderPattern = { "g$id" }
         studentRepoFolderPattern = { username }
         reposSubDir = "git"
-        reportFile = File("/Users/vadim/report.html")
+        reportFile = File("example/sampleReport.html")
         withDocs = true
 
         tasks {
@@ -49,7 +49,7 @@ val SAMPLE_CONFIG =
             }
         }
         group(id = "20215") {
-            student(name = "Vadim Мостовой 1") {
+            student(name = "Другой Вадим Мостовой") {
                 repositoryUrl = "https://github.com/lilvadim/OOP"
                 username = "lilvadim"
 

@@ -9,7 +9,7 @@ class ParseTest {
     @Test
     fun `parse using ScriptEngine API`() {
 
-        val parsed = parse(File("src/test/resources/sampleConfig.kts").readText())
+        val parsed = parse(File("example/sampleConfig.kts").readText())
 
         assertEquals(SAMPLE_CONFIG, parsed)
     }
