@@ -16,10 +16,10 @@ import java.util.*
 
 // Git related stuff
 
-fun App.downloadGitRepos(token: String = "", useToken: Boolean = false) {
+fun App.downloadGitRepos(useToken: Boolean = false) {
 
     val credentialsProvider: CredentialsProvider = if (useToken) {
-        fromToken(token)
+        fromToken(gitHubPersonalAccessToken!!)
     } else {
         val config = File("${userHomeDir()}/.gitconfig").readText()
         fromConfig(config)
