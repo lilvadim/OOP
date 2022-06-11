@@ -39,7 +39,7 @@ class App {
                 "(config.kts in root of working directory)"
     )
 
-    private val gitHubPersonalAccessToken: String? by argParser.option(
+    val gitHubPersonalAccessToken: String? by argParser.option(
         type = ArgType.String,
         fullName = "token",
         shortName = "t",
@@ -62,9 +62,9 @@ class App {
 
         try {
             if (gitHubPersonalAccessToken == null) {
-                downloadGitRepos()
+                downloadGitRepos(useToken = false)
             } else {
-                downloadGitRepos(token = gitHubPersonalAccessToken!!, useToken = true)
+                downloadGitRepos(useToken = true)
             }
         } catch (ex: IllegalStateException) {
             ex.printStackTrace()
