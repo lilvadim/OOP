@@ -100,7 +100,7 @@ class App {
 
                 groupReports += GroupReport(
                     groupID = group.id,
-                    totalLessonsCount = configuration.lessons.size,
+                    totalLessonsCount = configuration.lessonsPerGroup[group]!!.size,
                     testResults = perGroupReportResults,
                 )
             } // for groups
