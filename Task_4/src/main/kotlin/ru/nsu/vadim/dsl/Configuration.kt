@@ -8,7 +8,7 @@ const val DEFAULT_PATTERN = "dd.MM.yyyy"
 val DEFAULT_STUDENT_REPO_PATTERN: Student.() -> String = { name }
 val DEFAULT_TASK_FOLDER_PATTERN: Task.() -> String = { "Task_${id.replace(".", "_")}" }
 val DEFAULT_GROUP_FOLDER_PATTERN: Group.() -> String = { id }
-val DEFAULT_REPOS_SUBDIR = "repositories"
+const val DEFAULT_REPOS_SUBDIR = "repositories"
 
 @ConfigMarker
 class Configuration {
@@ -46,7 +46,11 @@ class Configuration {
     fun lessonsForGroups(vararg groupIds: String, init: Lessons.() -> Unit) {
         val lessons = Lessons().apply(init)
         for (gid in groupIds) {
-            lessonsPerGroupHolder += gid to lessons
+            if (lessonsPerGroupHolder[gid] == null) {
+                lessonsPerGroupHolder += gid to lessons
+            } else {
+                lessonsPerGroupHolder[gid]!! += lessons
+            }
         }
     }
 
